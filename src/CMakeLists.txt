@@ -1,5 +1,5 @@
 set(SRC 
-    mylib.cpp
+    json_value.cpp
 )
-add_library(json-parser ${SRC})
-target_include_directories (json-parser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_library(json-cpp ${SRC})
+target_include_directories (json-cpp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
