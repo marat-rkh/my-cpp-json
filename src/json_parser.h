@@ -37,7 +37,7 @@ private:
 
 class ParsedJson: public ParseResult {
 public:
-    ParsedJson(std::shared_ptr<JsonValue> const &value): json_value_(value) {}
+    explicit ParsedJson(std::shared_ptr<JsonValue> const &value): json_value_(value) {}
 
     Type type() const override { return Type::SUCCESS; }
     std::shared_ptr<JsonValue> const& json_value() const { return json_value_; }

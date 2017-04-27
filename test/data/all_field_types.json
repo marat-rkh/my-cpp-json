@@ -1,0 +1,8 @@
+{
+    "str_field": "str_value",
+    "arr_field" : [1, 2],
+    "num_field" :-123.4,
+    "bool_field" :  false,
+    "null_field": null,
+    "obj_field": {}
+}

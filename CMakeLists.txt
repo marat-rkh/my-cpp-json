@@ -44,3 +44,5 @@ add_subdirectory(app bin/app)
 
 enable_testing()
 add_subdirectory(test bin/test)
+
+file(COPY ${CMAKE_SOURCE_DIR}/test/data DESTINATION ${CMAKE_BINARY_DIR}/bin/test/)
