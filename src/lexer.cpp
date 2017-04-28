@@ -77,7 +77,7 @@ string ReadAlphas(istream &is) {
     return word;
 }
 
-Token json_cpp::internal::lexer::NextToken(istream &is) {
+Token NextToken(istream &is) {
     SkipSpaces(is);
     if(!is) {
         return Token(Token::Type::END);
@@ -116,4 +116,20 @@ Token json_cpp::internal::lexer::NextToken(istream &is) {
         }
         return Token(Token::Type::UNKNOWN, word);
     }
+}
+
+Token json_cpp::internal::lexer::Lexer::GetToken() {
+    if(peeked_) {
+        peeked_ = false;
+        return peeked_token_;
+    }
+    return NextToken(is_);
+}
+
+Token const &json_cpp::internal::lexer::Lexer::PeekToken() {
+    if(!peeked_) {
+        peeked_token_ = NextToken(is_);
+        peeked_ = true;
+    }
+    return peeked_token_;
 }

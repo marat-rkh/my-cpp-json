@@ -43,7 +43,17 @@ private:
     string value_;
 };
 
-Token NextToken(istream &is);
+class Lexer {
+public:
+    explicit Lexer(istream &is): is_(is) {}
+
+    Token GetToken();
+    Token const& PeekToken();
+private:
+    istream &is_;
+    bool peeked_ = false;
+    Token peeked_token_ = Token(Token::Type::UNKNOWN);
+};
 
 }
 }
