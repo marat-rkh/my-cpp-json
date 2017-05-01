@@ -57,6 +57,43 @@ void json_cpp::JsonParser::Error(std::string const &msg, unsigned int line, unsi
     error_pos_ = pos;
 }
 
+shared_ptr<JsonValue> json_cpp::JsonParser::ParseJValue() {
+    if(lexer_.PeekToken().type() == Token::Type::STRING) {
+        return make_shared<JsonString>(lexer_.GetToken().value());
+    }
+    if(lexer_.PeekToken().type() == Token::Type::NUMBER) {
+        return make_shared<JsonNumber>(std::stod(lexer_.GetToken().value()));
+    }
+    if(lexer_.PeekToken().type() == Token::Type::TRUE_LITERAL) {
+        lexer_.GetToken();
+        return make_shared<JsonBool>(true);
+    }
+    if(lexer_.PeekToken().type() == Token::Type::FALSE_LITERAL) {
+        lexer_.GetToken();
+        return make_shared<JsonBool>(false);
+    }
+    if(lexer_.PeekToken().type() == Token::Type::NULL_LITERAL) {
+        lexer_.GetToken();
+        return JsonNull::GetPtr();
+    }
+    if(lexer_.PeekToken().type() == Token::Type::SQ_BR_OPEN) {
+        auto arr = ParseJArray();
+        if(error_occured_) {
+            return shared_ptr<JsonValue>();
+        }
+        return arr;
+    }
+    if(lexer_.PeekToken().type() == Token::Type::C_BR_OPEN) {
+        auto j_obj = ParseJObject();
+        if(error_occured_) {
+            return shared_ptr<JsonValue>();
+        }
+        return j_obj;
+    }
+    Error("invalid json value declaration");
+    return shared_ptr<JsonValue>();
+}
+
 shared_ptr<JsonObject> json_cpp::JsonParser::ParseJObject() {
     if(lexer_.GetToken().type() != Token::Type::C_BR_OPEN) {
         Error("expected '{' at the beginning of json object");
@@ -100,43 +137,6 @@ pair<string, shared_ptr<JsonValue>> json_cpp::JsonParser::ParseKeyValue() {
         return {"", shared_ptr<JsonValue>()};
     }
     return {key.value(), val};
-}
-
-shared_ptr<JsonValue> json_cpp::JsonParser::ParseJValue() {
-    if(lexer_.PeekToken().type() == Token::Type::STRING) {
-        return make_shared<JsonString>(lexer_.GetToken().value());
-    }
-    if(lexer_.PeekToken().type() == Token::Type::NUMBER) {
-        return make_shared<JsonNumber>(std::stod(lexer_.GetToken().value()));
-    }
-    if(lexer_.PeekToken().type() == Token::Type::TRUE_LITERAL) {
-        lexer_.GetToken();
-        return make_shared<JsonBool>(true);
-    }
-    if(lexer_.PeekToken().type() == Token::Type::FALSE_LITERAL) {
-        lexer_.GetToken();
-        return make_shared<JsonBool>(false);
-    }
-    if(lexer_.PeekToken().type() == Token::Type::NULL_LITERAL) {
-        lexer_.GetToken();
-        return JsonNull::GetPtr();
-    }
-    if(lexer_.PeekToken().type() == Token::Type::SQ_BR_OPEN) {
-        auto arr = ParseJArray();
-        if(error_occured_) {
-            return shared_ptr<JsonValue>();
-        }
-        return arr;
-    }
-    if(lexer_.PeekToken().type() == Token::Type::C_BR_OPEN) {
-        auto j_obj = ParseJObject();
-        if(error_occured_) {
-            return shared_ptr<JsonValue>();
-        }
-        return j_obj;
-    }
-    Error("invalid json value declaration");
-    return shared_ptr<JsonValue>();
 }
 
 shared_ptr<JsonArray> json_cpp::JsonParser::ParseJArray() {
