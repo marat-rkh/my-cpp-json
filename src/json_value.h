@@ -3,8 +3,10 @@
 
 #include <string>
 #include <memory>
-#include <unordered_map>
+#include <map>
 #include <vector>
+
+#include "utils.h"
 
 namespace json_cpp {
 
@@ -43,6 +45,10 @@ private:
 
 class JsonObject: public JsonValue {
 public:
+    explicit JsonObject(std::map<std::string, std::shared_ptr<JsonValue>> const &vs)
+        : values_(vs)
+    {}
+
     Type type() const override { return Type::JOBJECT; }
 
     JsonValue const &get(std::string const &key) const { return *(values_.at(key)); }
@@ -51,10 +57,7 @@ public:
         std::shared_ptr<JsonValue> const &val
     ) { values_[key] = val; }
 private:
-    std::unordered_map<
-        std::string, 
-        std::shared_ptr<JsonValue>
-    > values_;
+    std::map<std::string, std::shared_ptr<JsonValue>> values_;
 };
 
 class JsonArray: public JsonValue {

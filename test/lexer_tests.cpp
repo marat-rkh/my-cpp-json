@@ -16,7 +16,7 @@ using std::pair;
 using std::string;
 
 void HasTokens(ifstream &ifs, vector<pair<Token::Type, string>> expected) {
-    Lexer lexer(ifs);
+    Lexer lexer(&ifs);
     for(auto const& e: expected) {
         ASSERT_EQ(lexer.GetToken(), Token(e.first, e.second));
     }
@@ -24,7 +24,7 @@ void HasTokens(ifstream &ifs, vector<pair<Token::Type, string>> expected) {
 
 TEST(lexer, should_peek) {
     ifstream ifs("data/empty_object.json");
-    Lexer lexer(ifs);
+    Lexer lexer(&ifs);
     Token expected(Type::C_BR_OPEN);
     ASSERT_EQ(lexer.PeekToken(), expected);
     ASSERT_EQ(lexer.PeekToken(), expected);

@@ -36,6 +36,10 @@ public:
         return type_ == other.type_ && value_ == other.value_;
     }
 
+    bool operator!=(Token const &other) const {
+        return !(*this == other);
+    }
+
     Type type() const { return type_; }
     string const& value() const { return value_; }
 private:
@@ -45,12 +49,14 @@ private:
 
 class Lexer {
 public:
-    explicit Lexer(istream &is): is_(is) {}
+    Lexer() = default;
+    explicit Lexer(istream *is): is_(is) {}
+    void init(istream *is);
 
     Token GetToken();
     Token const& PeekToken();
 private:
-    istream &is_;
+    istream *is_ = nullptr;
     bool peeked_ = false;
     Token peeked_token_ = Token(Token::Type::UNKNOWN);
 };

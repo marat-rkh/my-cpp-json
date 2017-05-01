@@ -1,6 +1,7 @@
 #include "lexer.h"
 
 #include <cctype>
+#include <stdexcept>
 
 using std::istream;
 using std::string;
@@ -118,17 +119,28 @@ Token NextToken(istream &is) {
     }
 }
 
+void json_cpp::internal::lexer::Lexer::init(istream *is) { 
+    is_ = is; 
+    peeked_ = false;
+}
+
 Token json_cpp::internal::lexer::Lexer::GetToken() {
+    if(!is_) {
+        throw std::runtime_error("Attemp to use uninitialized lexer");
+    }
     if(peeked_) {
         peeked_ = false;
         return peeked_token_;
     }
-    return NextToken(is_);
+    return NextToken(*is_);
 }
 
 Token const &json_cpp::internal::lexer::Lexer::PeekToken() {
+    if(!is_) {
+        throw std::runtime_error("Attemp to use uninitialized lexer");
+    }
     if(!peeked_) {
-        peeked_token_ = NextToken(is_);
+        peeked_token_ = NextToken(*is_);
         peeked_ = true;
     }
     return peeked_token_;

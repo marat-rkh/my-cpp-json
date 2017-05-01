@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "json_value.h"
+#include "lexer.h"
 
 namespace json_cpp {
 
@@ -12,7 +13,7 @@ class ParseResult {
 public:
     enum class Type {
         ERROR,
-        SUCCESS
+        JSON
     };
     virtual Type type() const = 0;
 };
@@ -37,15 +38,30 @@ private:
 
 class ParsedJson: public ParseResult {
 public:
-    explicit ParsedJson(std::shared_ptr<JsonValue> const &value): json_value_(value) {}
+    explicit ParsedJson(std::shared_ptr<JsonObject> const &value): value_(value) {}
 
-    Type type() const override { return Type::SUCCESS; }
-    std::shared_ptr<JsonValue> const& json_value() const { return json_value_; }
+    Type type() const override { return Type::JSON; }
+    std::shared_ptr<JsonObject> const& value() const { return value_; }
 private:
-    std::shared_ptr<JsonValue> json_value_;
+    std::shared_ptr<JsonObject> value_;
 };
 
-std::shared_ptr<ParseResult> Parse(std::string const &file_path);
+class JsonParser {
+public:
+    std::shared_ptr<ParseResult> Parse(std::string const &file_path);
+private:
+    void Error(std::string const &msg, unsigned int line, unsigned int pos);
+
+    std::shared_ptr<JsonObject> ParseObject();
+    std::pair<std::string, std::shared_ptr<JsonValue>> ParseKeyValue();
+
+    internal::lexer::Lexer lexer_;
+    
+    bool error_occured_ = false;
+    std::string error_msg_;
+    unsigned int error_line_ = 0;
+    unsigned int error_pos_ = 0;
+};
 
 }
 

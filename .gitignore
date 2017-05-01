@@ -30,3 +30,5 @@
 
 # build dir
 out/
+
+*.sublime-workspace
