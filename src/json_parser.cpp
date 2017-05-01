@@ -40,7 +40,7 @@ shared_ptr<ParseResult> json_cpp::JsonParser::Parse(string const &file_path) {
     auto res = ParseJObject();
     if(error_occured_) {
         return make_shared<ParseError>(error_line_, error_pos_, error_msg_);
-    } else if (ifs) {
+    } else if (lexer_.GetToken().type() != Token::Type::END) {
         // parsing succeeded but input still has some characters
         return make_shared<ParseError>(
             0, 0, "json file must contain one top level object"
@@ -101,6 +101,7 @@ shared_ptr<JsonObject> json_cpp::JsonParser::ParseJObject() {
     }
     map<string, shared_ptr<JsonValue>> values;
     if(lexer_.PeekToken().type() == Token::Type::C_BR_CLOSED) {
+        lexer_.GetToken();
         return make_shared<JsonObject>(values);
     }
     while(true) {

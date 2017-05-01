@@ -5,8 +5,8 @@
 
 namespace json_cpp {
 
-template<typename B, typename D> 
-std::shared_ptr<D> as(std::shared_ptr<B> v) {
+template<typename D, typename B> 
+std::shared_ptr<D> as(std::shared_ptr<B> const &v) {
     return std::dynamic_pointer_cast<D>(v);
 }
 
