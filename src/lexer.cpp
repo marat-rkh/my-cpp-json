@@ -8,8 +8,12 @@ using std::string;
 
 using json_cpp::internal::lexer::Token;
 
+bool HasChars(istream &is) {
+    return !is.fail() && (is.peek(), !is.eof());
+}
+
 void SkipSpaces(istream &is) {
-    while(is) {
+    while(HasChars(is)) {
         if(isspace(is.peek())) {
             is.get();
         } else {
@@ -20,7 +24,7 @@ void SkipSpaces(istream &is) {
 
 Token ReadString(istream &is) {
     string word(1, is.get());
-    while(is) {
+    while(HasChars(is)) {
         word.push_back(is.get());
         if(word.back() == '\"') {
             return Token(Token::Type::STRING, word);
@@ -31,7 +35,7 @@ Token ReadString(istream &is) {
 
 string ReadDigits(istream &is) {
     string word;
-    while(is) {
+    while(HasChars(is)) {
         if(isdigit(is.peek())) {
             word.push_back(is.get());
         } else {
@@ -68,7 +72,7 @@ Token ReadNumber(istream &is) {
 
 string ReadAlphas(istream &is) {
     string word;
-    while(is) {
+    while(HasChars(is)) {
         if(isalpha(is.peek())) {
             word.push_back(is.get());
         } else {
@@ -80,7 +84,7 @@ string ReadAlphas(istream &is) {
 
 Token NextToken(istream &is) {
     SkipSpaces(is);
-    if(!is) {
+    if(!HasChars(is)) {
         return Token(Token::Type::END);
     }
     char ch = is.peek();

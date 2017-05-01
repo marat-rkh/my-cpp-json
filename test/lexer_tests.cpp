@@ -36,7 +36,8 @@ TEST(lexer, should_prcess_empty_object) {
     ifstream ifs("data/empty_object.json");
     HasTokens(ifs, {
         {Type::C_BR_OPEN, ""},
-        {Type::C_BR_CLOSED, ""}
+        {Type::C_BR_CLOSED, ""},
+        {Type::END, ""}
     });
 }
 
@@ -79,7 +80,9 @@ TEST(lexer, should_prcess_all_field_types) {
         {Type::C_BR_OPEN, ""},
         {Type::C_BR_CLOSED, ""},
         
-        {Type::C_BR_CLOSED, ""}
+        {Type::C_BR_CLOSED, ""},
+
+        {Type::END, ""}
     });
 }
 
