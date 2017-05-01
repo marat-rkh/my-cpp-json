@@ -5,6 +5,7 @@
 #include <map>
 #include <utility>
 #include <string>
+#include <vector>
 
 #include "lexer.h"
 
@@ -15,6 +16,7 @@ using std::shared_ptr;
 using std::make_shared;
 using std::map;
 using std::pair;
+using std::vector;
 
 using json_cpp::ParseResult;
 using json_cpp::ParseError;
@@ -138,5 +140,29 @@ shared_ptr<JsonValue> json_cpp::JsonParser::ParseJValue() {
 }
 
 shared_ptr<JsonArray> json_cpp::JsonParser::ParseJArray() {
-    return shared_ptr<JsonArray>();
+    if(lexer_.GetToken().type() != Token::Type::SQ_BR_OPEN) {
+        Error("expected '[' at the beginning of json array");
+        return shared_ptr<JsonArray>();
+    }
+    vector<shared_ptr<JsonValue>> values;
+    if(lexer_.PeekToken().type() == Token::Type::SQ_BR_CLOSED) {
+        return make_shared<JsonArray>(values);
+    }
+    while(true) {
+        auto res = ParseJValue();
+        if(error_occured_) {
+            return shared_ptr<JsonArray>();
+        }
+        values.push_back(res);
+        if(lexer_.PeekToken().type() == Token::Type::COMMA) {
+            lexer_.GetToken();
+        } else {
+            break;
+        }
+    }
+    if(lexer_.GetToken().type() != Token::Type::SQ_BR_CLOSED) {
+        Error("expected ']' at the end of json array");
+        return shared_ptr<JsonArray>();
+    }
+    return make_shared<JsonArray>(values);
 }

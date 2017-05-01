@@ -68,6 +68,10 @@ class JsonArray: public JsonValue {
 public:
     using size_type = std::vector<JsonValue>::size_type;
 
+    explicit JsonArray(std::vector<std::shared_ptr<JsonValue>> const &vs)
+        : values_(vs)
+    {}
+
     Type type() const override { return Type::JARRAY; }
 
     JsonValue const &get(size_type pos) const { return *(values_[pos]); }
