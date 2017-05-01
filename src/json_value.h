@@ -25,6 +25,8 @@ public:
 
 class JsonString: public JsonValue {
 public:
+    explicit JsonString(std::string const &s): value_(s) {}
+
     Type type() const override { return Type::JSTRING; }
 
     std::string const &value() const { return value_; }
@@ -35,6 +37,8 @@ private:
 
 class JsonNumber: public JsonValue {
 public:
+    explicit JsonNumber(double v): value_(v) {}
+
     Type type() const override { return Type::JNUMBER; }
     
     double value() const { return value_; }
@@ -74,6 +78,8 @@ private:
 
 class JsonBool: public JsonValue {
 public:
+    explicit JsonBool(bool b): value_(b) {}
+
     Type type() const override { return Type::JBOOL; }
 
     bool value() const { return value_; }
@@ -85,6 +91,20 @@ private:
 class JsonNull: public JsonValue {
 public:
     Type type() const override { return Type::JNULL; }
+
+    static std::shared_ptr<JsonNull> const &GetPtr() {
+        static auto instance = std::shared_ptr<JsonNull>(new JsonNull());
+        return instance;
+    }
+
+    static JsonNull &Get() {
+        return *GetPtr();
+    }
+private:
+    JsonNull() {}
+public:
+    JsonNull(JsonNull const &) = delete;
+    void operator=(JsonNull const &) = delete;
 };
 
 }

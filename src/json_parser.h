@@ -50,10 +50,12 @@ class JsonParser {
 public:
     std::shared_ptr<ParseResult> Parse(std::string const &file_path);
 private:
-    void Error(std::string const &msg, unsigned int line, unsigned int pos);
+    void Error(std::string const &msg, unsigned int line = 0, unsigned int pos = 0);
 
-    std::shared_ptr<JsonObject> ParseObject();
+    std::shared_ptr<JsonObject> ParseJObject();
     std::pair<std::string, std::shared_ptr<JsonValue>> ParseKeyValue();
+    std::shared_ptr<JsonValue> ParseJValue();
+    std::shared_ptr<JsonArray> ParseJArray();
 
     internal::lexer::Lexer lexer_;
     
