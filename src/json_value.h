@@ -5,32 +5,37 @@
 #include <memory>
 #include <map>
 #include <vector>
+#include <cstddef>
 
 #include "utils.h"
 
 namespace json_cpp {
 
+class Json;
+
+enum class JType {
+    JSTRING,
+    JNUMBER,
+    JOBJECT,
+    JARRAY,
+    JBOOL,
+    JNULL
+};
+
+// TODO move to separate file
+namespace inner { namespace json_model {
+
 class JsonValue {
 public:
-    enum class Type {
-        JSTRING,
-        JNUMBER,
-        JOBJECT,
-        JARRAY,
-        JBOOL,
-        JNULL
-    };
-    virtual Type type() const = 0;
+    virtual JType type() const = 0;
 };
 
 class JsonString: public JsonValue {
 public:
     explicit JsonString(std::string const &s): value_(s) {}
 
-    Type type() const override { return Type::JSTRING; }
-
-    std::string const &value() const { return value_; }
-    void value(const std::string &v) { value_ = v; }
+    JType type() const override { return JType::JSTRING; }
+    std::string &value() { return value_; }
 private:
     std::string value_;
 };
@@ -39,76 +44,79 @@ class JsonNumber: public JsonValue {
 public:
     explicit JsonNumber(double v): value_(v) {}
 
-    Type type() const override { return Type::JNUMBER; }
-    
-    double value() const { return value_; }
-    void value(double v) { value_ = v; }
+    JType type() const override { return JType::JNUMBER; }
+    double &value() { return value_; }
 private:
     double value_ = 0.0;
 };
 
 class JsonObject: public JsonValue {
 public:
-    explicit JsonObject(std::map<std::string, std::shared_ptr<JsonValue>> const &vs)
-        : values_(vs)
-    {}
-
-    Type type() const override { return Type::JOBJECT; }
-
-    JsonValue const &get(std::string const &key) const { return *(values_.at(key)); }
-    void set(
-        std::string const &key, 
-        std::shared_ptr<JsonValue> const &val
-    ) { values_[key] = val; }
+    JType type() const override { return JType::JOBJECT; }
+    std::map<std::string, Json> &value() { return value_; }
 private:
-    std::map<std::string, std::shared_ptr<JsonValue>> values_;
+    std::map<std::string, Json> value_;
 };
 
 class JsonArray: public JsonValue {
 public:
     using size_type = std::vector<JsonValue>::size_type;
 
-    explicit JsonArray(std::vector<std::shared_ptr<JsonValue>> const &vs)
-        : values_(vs)
-    {}
-
-    Type type() const override { return Type::JARRAY; }
-
-    JsonValue const &get(size_type pos) const { return *(values_[pos]); }
-    void set(size_type pos, std::shared_ptr<JsonValue> const &val) { values_[pos] = val; }
+    JType type() const override { return JType::JARRAY; }
+    std::vector<Json> &value() { return value_; }
 private:
-    std::vector<std::shared_ptr<JsonValue>> values_;
+    std::vector<Json> value_;
 };
 
 class JsonBool: public JsonValue {
 public:
     explicit JsonBool(bool b): value_(b) {}
 
-    Type type() const override { return Type::JBOOL; }
-
-    bool value() const { return value_; }
-    void value(bool v) { value_ = v; }
+    JType type() const override { return JType::JBOOL; }
+    bool &value() { return value_; }
 private:
     bool value_ = false;
 };
 
-class JsonNull: public JsonValue {
+}} // namespace inner::json_model
+
+class Json {
 public:
-    Type type() const override { return Type::JNULL; }
+    using size_type = inner::json_model::JsonArray::size_type;
 
-    static std::shared_ptr<JsonNull> const &GetPtr() {
-        static auto instance = std::shared_ptr<JsonNull>(new JsonNull());
-        return instance;
-    }
+    Json() = default;
+    Json(std::nullptr_t np): Json() {}
+    Json(std::string const& str);
+    Json(char const *c_str): Json(std::string(c_str)) {}
+    Json(double num);
+    Json(bool b);
 
-    static JsonNull &Get() {
-        return *GetPtr();
-    }
+    Json const &operator[](std::string const &field_name) const;
+    Json &operator[](std::string const &field_name);
+
+    Json const &operator[](size_type index) const;
+    Json &operator[](size_type index);
+
+    Json &operator+=(std::pair<std::string, Json> const& pair);
+    Json &operator+=(Json const& val);
+
+    Json &operator=(std::string const& str);
+    Json &operator=(char const *c_str) { return (*this) = std::string(c_str); }
+    Json &operator=(double num);
+    Json &operator=(bool b);
+    Json &operator=(std::nullptr_t np);
+
+    std::string const &AsString() const;
+    double AsDouble() const;
+    bool AsBool() const;
+    std::nullptr_t AsNull() const;
+
+    JType Type() { return value_ ? value_->type() : JType::JNULL; }
+
+    static Json MakeObject();
+    static Json MakeArray();
 private:
-    JsonNull() {}
-public:
-    JsonNull(JsonNull const &) = delete;
-    void operator=(JsonNull const &) = delete;
+    std::shared_ptr<inner::json_model::JsonValue> value_;
 };
 
 }

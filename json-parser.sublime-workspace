@@ -4,6 +4,50 @@
 		"selected_items":
 		[
 			[
+				"pe",
+				"peek"
+			],
+			[
+				"inc",
+				"inc\t#include <…>"
+			],
+			[
+				"ParseJ",
+				"ParseJValue"
+			],
+			[
+				"va",
+				"values"
+			],
+			[
+				"Js",
+				"JsonBool"
+			],
+			[
+				"do",
+				"double"
+			],
+			[
+				"J",
+				"JsonNumber"
+			],
+			[
+				"l",
+				"lexer_"
+			],
+			[
+				"T",
+				"Type"
+			],
+			[
+				"err",
+				"error_occured_"
+			],
+			[
+				"er",
+				"error_pos_"
+			],
+			[
 				"JS",
 				"JsonObject"
 			],
@@ -12,20 +56,8 @@
 				"values_"
 			],
 			[
-				"Js",
-				"JsonObject"
-			],
-			[
-				"T",
-				"Type"
-			],
-			[
 				"sh",
 				"shared_ptr"
-			],
-			[
-				"inc",
-				"inc\t#include <…>"
 			],
 			[
 				"ma",
@@ -34,10 +66,6 @@
 			[
 				"le",
 				"lexer_"
-			],
-			[
-				"pe",
-				"peeked_"
 			],
 			[
 				"p",
@@ -96,10 +124,6 @@
 				"ifstream"
 			],
 			[
-				"l",
-				"line"
-			],
-			[
 				"pri",
 				"private"
 			],
@@ -122,10 +146,6 @@
 			[
 				"Jsao",
 				"JsonValue"
-			],
-			[
-				"va",
-				"value_"
 			],
 			[
 				"in",
@@ -212,29 +232,10 @@
 	"buffers":
 	[
 		{
-			"file": "src/lexer.h",
-			"settings":
-			{
-				"buffer_size": 1167,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "src/lexer.cpp",
 			"settings":
 			{
-				"buffer_size": 3111,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/json_value.h",
-			"settings":
-			{
-				"buffer_size": 2184,
-				"encoding": "UTF-8",
+				"buffer_size": 3548,
 				"line_ending": "Unix"
 			}
 		},
@@ -242,7 +243,7 @@
 			"file": "src/json_parser.h",
 			"settings":
 			{
-				"buffer_size": 1348,
+				"buffer_size": 1669,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -251,8 +252,25 @@
 			"file": "src/json_parser.cpp",
 			"settings":
 			{
-				"buffer_size": 1942,
+				"buffer_size": 5128,
 				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "test/json_parser_tests.cpp",
+			"settings":
+			{
+				"buffer_size": 422,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "test/CMakeLists.txt",
+			"settings":
+			{
+				"buffer_size": 403,
 				"line_ending": "Unix"
 			}
 		}
@@ -290,22 +308,30 @@
 	"expanded_folders":
 	[
 		"/home/mrx/GitRepos/json-parser",
+		"/home/mrx/GitRepos/json-parser/out",
+		"/home/mrx/GitRepos/json-parser/out/bin",
+		"/home/mrx/GitRepos/json-parser/out/bin/test",
 		"/home/mrx/GitRepos/json-parser/src",
 		"/home/mrx/GitRepos/json-parser/test",
 		"/home/mrx/GitRepos/json-parser/test/data"
 	],
 	"file_history":
 	[
-		"/home/mrx/dinar_code.st",
+		"/home/mrx/GitRepos/json-parser/src/json_value.h",
+		"/home/mrx/GitRepos/json-parser/src/lexer.h",
+		"/home/mrx/GitRepos/json-parser/src/lexer.cpp",
 		"/home/mrx/GitRepos/json-parser/test/lexer_tests.cpp",
+		"/home/mrx/GitRepos/json-parser/src/utils.h",
+		"/home/mrx/GitRepos/json-parser/test/CMakeLists.txt",
+		"/home/mrx/GitRepos/json-parser/.gitignore",
+		"/home/mrx/GitRepos/json-parser/src/unils.h",
+		"/home/mrx/dinar_code.st",
 		"/home/mrx/GitRepos/json-parser/CMakeLists.txt",
 		"/home/mrx/GitRepos/json-parser/test/data/all_field_types.json",
 		"/home/mrx/GitRepos/json-parser/test/data/empty_object.json",
-		"/home/mrx/GitRepos/json-parser/test/CMakeLists.txt",
 		"/home/mrx/GitRepos/json-parser/src/CMakeLists.txt",
 		"/home/mrx/GitRepos/json-parser/src/json_parser.h",
 		"/home/mrx/GitRepos/json-parser/src/json_parser.cpp",
-		"/home/mrx/GitRepos/json-parser/src/json_value.h",
 		"/home/mrx/GitRepos/json-parser/src/json_value.cpp",
 		"/home/mrx/GitRepos/json-parser/test/json_value_tests.cpp",
 		"/home/mrx/GitRepos/json-parser/app/CMakeLists.txt",
@@ -313,7 +339,6 @@
 		"/home/mrx/GitRepos/json-parser/src/json_token.cpp",
 		"/home/mrx/GitRepos/json-parser/test/complex-tests.cpp",
 		"/home/mrx/GitRepos/json-parser/app/main.cpp",
-		"/home/mrx/GitRepos/json-parser/.gitignore",
 		"/home/mrx/GitRepos/json-parser/src/json-value-type.h",
 		"/home/mrx/GitRepos/json-parser/json-parser.sublime-project",
 		"/home/mrx/GitRepos/json-parser/test.sh",
@@ -371,6 +396,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"hasChars",
+			";\n",
+			"values",
+			"key",
 			"NextToken",
 			"{\n",
 			"\"\"},\n",
@@ -402,32 +431,34 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/lexer.h",
+					"file": "src/lexer.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1167,
+						"buffer_size": 3548,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								241,
-								241
+								3095,
+								3095
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 405.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 4,
@@ -435,19 +466,79 @@
 				},
 				{
 					"buffer": 1,
-					"file": "src/lexer.cpp",
+					"file": "src/json_parser.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3111,
+						"buffer_size": 1669,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								238,
-								238
+								233,
+								233
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 270.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/json_parser.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5128,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3276,
+								3276
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1440.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "test/json_parser_tests.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 422,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								422,
+								422
 							]
 						],
 						"settings":
@@ -458,97 +549,35 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/json_value.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2184,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1276,
-								1276
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 495.0,
-						"zoom_level": 1.0
-					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "src/json_parser.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1348,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1090,
-								1090
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 225.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
 					"buffer": 4,
-					"file": "src/json_parser.cpp",
-					"semi_transient": false,
+					"file": "test/CMakeLists.txt",
+					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 1942,
+						"buffer_size": 403,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1854,
-								1854
+								403,
+								403
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 337.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 3,
 					"type": "text"
 				}
 			]

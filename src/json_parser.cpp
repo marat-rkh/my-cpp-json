@@ -18,23 +18,10 @@ using std::map;
 using std::pair;
 using std::vector;
 
-using json_cpp::ParseResult;
-using json_cpp::ParseError;
-using json_cpp::ParsedJson;
-using json_cpp::internal::lexer::Lexer;
-using json_cpp::internal::lexer::Token;
+using namespace json_cpp;
+using namespace json_cpp::internal::lexer;
 
-using json_cpp::as;
-
-using json_cpp::JsonObject;
-using json_cpp::JsonValue;
-using json_cpp::JsonString;
-using json_cpp::JsonNumber;
-using json_cpp::JsonBool;
-using json_cpp::JsonNull;
-using json_cpp::JsonArray;
-
-shared_ptr<ParseResult> json_cpp::JsonParser::Parse(string const &file_path) {
+JsonParser::ParseResultPtr JsonParser::Parse(string const &file_path) {
     ifstream ifs(file_path);
     lexer_.init(&ifs);
     auto res = ParseJObject();
@@ -50,66 +37,66 @@ shared_ptr<ParseResult> json_cpp::JsonParser::Parse(string const &file_path) {
     }
 }
 
-void json_cpp::JsonParser::Error(std::string const &msg, unsigned int line, unsigned int pos) {
+void JsonParser::Error(std::string const &msg, unsigned int line, unsigned int pos) {
     error_occured_ = true;
     error_msg_ = msg;
     error_line_ = line;
     error_pos_ = pos;
 }
 
-shared_ptr<JsonValue> json_cpp::JsonParser::ParseJValue() {
+Json JsonParser::ParseJValue() {
     if(lexer_.PeekToken().type() == Token::Type::STRING) {
-        return make_shared<JsonString>(lexer_.GetToken().value());
+        return Json(lexer_.GetToken().value());
     }
     if(lexer_.PeekToken().type() == Token::Type::NUMBER) {
-        return make_shared<JsonNumber>(std::stod(lexer_.GetToken().value()));
+        return Json(std::stod(lexer_.GetToken().value()));
     }
     if(lexer_.PeekToken().type() == Token::Type::TRUE_LITERAL) {
         lexer_.GetToken();
-        return make_shared<JsonBool>(true);
+        return Json(true);
     }
     if(lexer_.PeekToken().type() == Token::Type::FALSE_LITERAL) {
         lexer_.GetToken();
-        return make_shared<JsonBool>(false);
+        return Json(false);
     }
     if(lexer_.PeekToken().type() == Token::Type::NULL_LITERAL) {
         lexer_.GetToken();
-        return JsonNull::GetPtr();
+        return Json();
     }
     if(lexer_.PeekToken().type() == Token::Type::SQ_BR_OPEN) {
         auto arr = ParseJArray();
         if(error_occured_) {
-            return shared_ptr<JsonValue>();
+            return Json();
         }
         return arr;
     }
     if(lexer_.PeekToken().type() == Token::Type::C_BR_OPEN) {
         auto j_obj = ParseJObject();
         if(error_occured_) {
-            return shared_ptr<JsonValue>();
+            return Json();
         }
         return j_obj;
     }
     Error("invalid json value declaration");
-    return shared_ptr<JsonValue>();
+    return Json();
 }
 
-shared_ptr<JsonObject> json_cpp::JsonParser::ParseJObject() {
+Json JsonParser::ParseJObject() {
     if(lexer_.GetToken().type() != Token::Type::C_BR_OPEN) {
         Error("expected '{' at the beginning of json object");
-        return shared_ptr<JsonObject>();
+        return Json();
     }
-    map<string, shared_ptr<JsonValue>> values;
     if(lexer_.PeekToken().type() == Token::Type::C_BR_CLOSED) {
         lexer_.GetToken();
-        return make_shared<JsonObject>(values);
+        return Json::MakeObject();
     }
+    Json obj;
     while(true) {
         auto res = ParseKeyValue();
         if(error_occured_) {
-            return shared_ptr<JsonObject>();
+            return Json();
         }
-        values.insert(res);
+        obj += res;
         if(lexer_.PeekToken().type() == Token::Type::COMMA) {
             lexer_.GetToken();
         } else {
@@ -118,43 +105,44 @@ shared_ptr<JsonObject> json_cpp::JsonParser::ParseJObject() {
     }
     if(lexer_.GetToken().type() != Token::Type::C_BR_CLOSED) {
         Error("expected '}' at the end of json object");
-        return shared_ptr<JsonObject>();
+        return Json();
     }
-    return make_shared<JsonObject>(values);
+    return obj;
 }
 
-pair<string, shared_ptr<JsonValue>> json_cpp::JsonParser::ParseKeyValue() {
+pair<string, Json> JsonParser::ParseKeyValue() {
     auto key = lexer_.GetToken();
     if(key.type() != Token::Type::STRING) {
         Error("expected string as field name");
-        return {"", shared_ptr<JsonValue>()};
+        return {"", Json()};
     }
     if(lexer_.GetToken().type() != Token::Type::COLUMN) {
         Error("expected ':' after field name");
-        return {"", shared_ptr<JsonValue>()};
+        return {"", Json()};
     }
     auto val = ParseJValue();
     if(error_occured_) {
-        return {"", shared_ptr<JsonValue>()};
+        return {"", Json()};
     }
     return {key.value(), val};
 }
 
-shared_ptr<JsonArray> json_cpp::JsonParser::ParseJArray() {
+Json JsonParser::ParseJArray() {
     if(lexer_.GetToken().type() != Token::Type::SQ_BR_OPEN) {
         Error("expected '[' at the beginning of json array");
-        return shared_ptr<JsonArray>();
+        return Json();
     }
-    vector<shared_ptr<JsonValue>> values;
     if(lexer_.PeekToken().type() == Token::Type::SQ_BR_CLOSED) {
-        return make_shared<JsonArray>(values);
+        lexer_.GetToken();
+        return Json::MakeArray();
     }
+    Json arr;
     while(true) {
         auto res = ParseJValue();
         if(error_occured_) {
-            return shared_ptr<JsonArray>();
+            return Json();
         }
-        values.push_back(res);
+        arr += res;
         if(lexer_.PeekToken().type() == Token::Type::COMMA) {
             lexer_.GetToken();
         } else {
@@ -163,7 +151,7 @@ shared_ptr<JsonArray> json_cpp::JsonParser::ParseJArray() {
     }
     if(lexer_.GetToken().type() != Token::Type::SQ_BR_CLOSED) {
         Error("expected ']' at the end of json array");
-        return shared_ptr<JsonArray>();
+        return Json();
     }
-    return make_shared<JsonArray>(values);
+    return arr;
 }

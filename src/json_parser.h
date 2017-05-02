@@ -38,24 +38,26 @@ private:
 
 class ParsedJson: public ParseResult {
 public:
-    explicit ParsedJson(std::shared_ptr<JsonObject> const &value): value_(value) {}
+    explicit ParsedJson(Json const &value): value_(value) {}
 
     Type type() const override { return Type::JSON; }
-    std::shared_ptr<JsonObject> const& value() const { return value_; }
+    Json const& value() const { return value_; }
 private:
-    std::shared_ptr<JsonObject> value_;
+    Json value_;
 };
 
 class JsonParser {
 public:
-    std::shared_ptr<ParseResult> Parse(std::string const &file_path);
+    using ParseResultPtr = std::shared_ptr<ParseResult>;
+
+    ParseResultPtr Parse(std::string const &file_path);
 private:
     void Error(std::string const &msg, unsigned int line = 0, unsigned int pos = 0);
 
-    std::shared_ptr<JsonValue> ParseJValue();
-    std::shared_ptr<JsonObject> ParseJObject();
-    std::pair<std::string, std::shared_ptr<JsonValue>> ParseKeyValue();
-    std::shared_ptr<JsonArray> ParseJArray();
+    Json ParseJValue();
+    Json ParseJObject();
+    std::pair<std::string, Json> ParseKeyValue();
+    Json ParseJArray();
 
     internal::lexer::Lexer lexer_;
     
