@@ -24,13 +24,13 @@ using namespace json_cpp::internal::lexer;
 JsonParser::ParseResultPtr JsonParser::Parse(string const &file_path) {
     ifstream ifs(file_path);
     lexer_.init(&ifs);
-    auto res = ParseJObject();
+    auto res = ParseJValue();
     if(error_occured_) {
         return make_shared<ParseError>(error_line_, error_pos_, error_msg_);
     } else if (lexer_.GetToken().type() != Token::Type::END) {
         // parsing succeeded but input still has some characters
         return make_shared<ParseError>(
-            0, 0, "json file must contain one top level object"
+            0, 0, "json file must contain one top level json value"
         );
     } else {
         return make_shared<ParsedJson>(res);
