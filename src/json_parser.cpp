@@ -6,6 +6,7 @@
 #include <utility>
 #include <string>
 #include <vector>
+#include <cassert>
 
 #include "lexer.h"
 
@@ -44,9 +45,14 @@ void JsonParser::Error(std::string const &msg, unsigned int line, unsigned int p
     error_pos_ = pos;
 }
 
+string TrimQuotes(string const& s) {
+    assert(s.size() >= 2 && s[0] == '\"' && s[s.size() - 1] == '\"');
+    return s.substr(1, s.size() - 2);
+}
+
 Json JsonParser::ParseJValue() {
     if(lexer_.PeekToken().type() == Token::Type::STRING) {
-        return Json(lexer_.GetToken().value());
+        return Json(TrimQuotes(lexer_.GetToken().value()));
     }
     if(lexer_.PeekToken().type() == Token::Type::NUMBER) {
         return Json(std::stod(lexer_.GetToken().value()));
@@ -124,7 +130,7 @@ pair<string, Json> JsonParser::ParseKeyValue() {
     if(error_occured_) {
         return {"", Json()};
     }
-    return {key.value(), val};
+    return {TrimQuotes(key.value()), val};
 }
 
 Json JsonParser::ParseJArray() {
