@@ -15,6 +15,10 @@ TEST(json, should_handle_number) {
     Json json(123.0);
     ASSERT_EQ(json.Type(), JType::JNUMBER);
     ASSERT_EQ(json.AsDouble(), 123.0);
+
+    Json json2(123);
+    ASSERT_EQ(json2.Type(), JType::JNUMBER);
+    ASSERT_EQ(json2.AsDouble(), 123);
 }
 
 TEST(json, should_handle_bool) {
@@ -33,12 +37,7 @@ TEST(json, should_handle_null) {
 }
 
 TEST(json, should_handle_array) {
-    Json json;
-    json += "some str";
-    json += "other str";
-    json += 123.0;
-    json += false;
-    json += nullptr;
+    Json json = Json::arr({"some str", "other str", 123.0, false, nullptr});
     ASSERT_EQ(json.Type(), JType::JARRAY);
     ASSERT_EQ(json[0].AsString(), "some str");
     ASSERT_EQ(json[1].AsString(), "other str");
@@ -46,23 +45,37 @@ TEST(json, should_handle_array) {
     ASSERT_EQ(json[3].AsBool(), false);
     ASSERT_EQ(json[4].AsNull(), nullptr);
 
-    ASSERT_EQ(Json::MakeArray().Type(), JType::JARRAY);
+    json += 1;
+    json += "abs";
+    json += false;
+    ASSERT_EQ(json[5].AsDouble(), 1.0);
+    ASSERT_EQ(json[6].AsString(), "abs");
+    ASSERT_EQ(json[7].AsBool(), false);
+    
+    json[7] = {{"a", 1}, {"b", 2}};
+    ASSERT_EQ(json[7]["a"].AsDouble(), 1);
+    ASSERT_EQ(json[7]["b"].AsDouble(), 2);
 }
 
 TEST(json, should_handle_object) {
-    Json json;
-    json += {"field1", "some str"};
-    json += {"field2", 123.0};
-    Json sub_obj;
-    sub_obj += {"sub field", true};
-    json += {"field3", sub_obj};
+    Json json{
+        {"field1", "some str"},
+        {"field2", 123.0},
+        {"field3", {
+            {"sub field", true}
+        }},
+        {"field4", Json::arr({false, false, true})}
+    };
     ASSERT_EQ(json.Type(), JType::JOBJECT);
     ASSERT_EQ(json["field1"].AsString(), "some str");
     ASSERT_EQ(json["field2"].AsDouble(), 123.0);
     ASSERT_EQ(json["field3"]["sub field"].AsBool(), true);
+    ASSERT_EQ(json["field4"].Type(), JType::JARRAY);
     ASSERT_EQ(json["no such field"].AsNull(), nullptr);
+    json["field5"] = "other str";
+    ASSERT_EQ(json["field5"].AsString(), "other str");
 
-    ASSERT_EQ(Json::MakeObject().Type(), JType::JOBJECT);
+    ASSERT_EQ(Json::obj().Type(), JType::JOBJECT);
 }
 
 TEST(json, should_handle_assignment) {
@@ -76,33 +89,33 @@ TEST(json, should_handle_assignment) {
     ASSERT_EQ(json.Type(), JType::JSTRING);
     json = false;
     ASSERT_EQ(json.Type(), JType::JBOOL);
+    json = Json::obj();
+    ASSERT_EQ(json.Type(), JType::JOBJECT);
 }
 
 TEST(json, should_handle_real_world1_json) {
-    Json gloss_see_also;
-    gloss_see_also += "GML";
-    gloss_see_also += "XML";
-    Json gloss_def;
-    gloss_def += {"para", "A meta-markup language, used to create markup languages such as DocBook."};
-    gloss_def += {"GlossSeeAlso", gloss_see_also};
-    Json gloss_entry;
-    gloss_entry += {"ID", "SGML"};
-    gloss_entry += {"SortAs", "SGML"};
-    gloss_entry += {"GlossTerm", "Standard Generalized Markup Language"};
-    gloss_entry += {"Acronym", "SGML"};
-    gloss_entry += {"Abbrev", "ISO 8879:1986"};
-    gloss_entry += {"GlossDef", gloss_def};
-    gloss_entry += {"GlossSee", "markup"};
-    Json gloss_list;
-    gloss_list += {"GlossEntry", gloss_entry};
-    Json gloss_div;
-    gloss_div += {"title", "S"};
-    gloss_div += {"GlossList", gloss_list};
-    Json glossary;
-    glossary += {"title", "example glossary"};
-    glossary += {"GlossDiv", gloss_div};
-    Json obj;
-    obj += {"glossary", glossary};
+    Json obj{
+        {"glossary", {
+            {"title","example glossary"},
+            {"GlossDiv", {
+                {"title", "S"},
+                {"GlossList", {
+                    {"GlossEntry", {
+                        {"ID", "SGML"},
+                        {"SortAs","SGML"},
+                        {"GlossTerm","Standard Generalized Markup Language"},
+                        {"Acronym","SGML"},
+                        {"Abbrev","ISO 8879:1986"},
+                        {"GlossDef", {
+                            {"para", "A meta-markup language, used to create markup languages such as DocBook."},
+                            {"GlossSeeAlso", Json::arr({"GML", "XML"})}
+                        }},
+                        {"GlossSee","markup"}
+                    }}
+                }}
+            }}
+        }}
+    };
 
     ASSERT_EQ(obj["glossary"]["title"].AsString(), "example glossary");
     ASSERT_EQ(obj["glossary"]["GlossDiv"]["title"].AsString(), "S");
@@ -121,33 +134,34 @@ TEST(json, should_handle_real_world1_json) {
 }
 
 TEST(json, should_handle_real_world2_json) {
-    Json window;
-    window += {"title", "Sample Konfabulator Widget"};
-    window += {"name", "main_window"};
-    window += {"width", 500.0};
-    window += {"height", 500.0};
-    Json image;
-    image += {"src", "Images/Sun.png"};
-    image += {"name", "sun1"};
-    image += {"hOffset", 250.0};
-    image += {"vOffset", 250.0};
-    image += {"alignment", "center"};
-    Json text;
-    text += {"data", "Click Here"};
-    text += {"size", 36.0};
-    text += {"style", "bold"};
-    text += {"name", "text1"};
-    text += {"hOffset", 250.0};
-    text += {"vOffset", 100.0};
-    text += {"alignment", "center"};
-    text += {"onMouseUp", "sun1.opacity = (sun1.opacity / 100) * 90;"};
-    Json widget;
-    widget += {"debug", "on"};
-    widget += {"window", window};
-    widget += {"image", image};
-    widget += {"text", text};
-    Json obj;
-    obj += {"widget", widget};
+    Json obj{
+        {"widget", {
+            {"debug", "on"},
+            {"window", {
+                {"title", "Sample Konfabulator Widget"},
+                {"name", "main_window"},
+                {"width", 500},
+                {"height", 500}
+            }},
+            {"image", {
+                {"src", "Images/Sun.png"},
+                {"name", "sun1"},
+                {"hOffset", 250},
+                {"vOffset", 250},
+                {"alignment", "center"}
+            }},
+            {"text", {
+                {"data", "Click Here"},
+                {"size", 36},
+                {"style", "bold"},
+                {"name", "text1"},
+                {"hOffset", 250},
+                {"vOffset", 100},
+                {"alignment", "center"},
+                {"onMouseUp", "sun1.opacity = (sun1.opacity / 100) * 90;"}
+            }}
+        }}
+    };
 
     ASSERT_EQ(obj["widget"]["debug"].AsString(), "on");
     ASSERT_EQ(obj["widget"]["window"]["title"].AsString(), "Sample Konfabulator Widget");

@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <initializer_list>
 
 namespace json_cpp {
 
@@ -47,6 +48,11 @@ private:
 
 class JsonObject: public JsonValue {
 public:
+    JsonObject() = default;
+    explicit JsonObject(std::initializer_list<std::pair<const std::string, Json>> const &lst)
+        : value_(lst)
+    {}
+
     JType type() const override { return JType::JOBJECT; }
     std::map<std::string, Json> &value() { return value_; }
 private:
@@ -56,6 +62,11 @@ private:
 class JsonArray: public JsonValue {
 public:
     using size_type = std::vector<JsonValue>::size_type;
+
+    JsonArray() = default;
+    explicit JsonArray(std::initializer_list<Json> const &lst)
+        : value_(lst)
+    {}
 
     JType type() const override { return JType::JARRAY; }
     std::vector<Json> &value() { return value_; }

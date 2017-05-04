@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include <cstddef>
+#include <initializer_list>
 
 #include "json_model.h"
 #include "utils.h"
@@ -21,7 +22,9 @@ public:
     Json(std::string const& str);
     Json(char const *c_str): Json(std::string(c_str)) {}
     Json(double num);
+    Json(int num): Json(static_cast<double>(num)) {}
     Json(bool b);
+    Json(std::initializer_list<std::pair<const std::string, Json>> const &lst);
 
     Json const &operator[](std::string const &field_name) const;
     Json &operator[](std::string const &field_name);
@@ -29,15 +32,9 @@ public:
     Json const &operator[](size_type index) const;
     Json &operator[](size_type index);
 
-    Json &operator+=(std::pair<std::string, Json> const& pair);
     Json &operator+=(Json const& val);
 
-    // TODO replace with one operator accepting Json const & (implicit conversions will do the rest)
-    Json &operator=(std::string const& str);
-    Json &operator=(char const *c_str) { return (*this) = std::string(c_str); }
-    Json &operator=(double num);
-    Json &operator=(bool b);
-    Json &operator=(std::nullptr_t np);
+    Json &operator=(Json const& other);
 
     std::string const &AsString() const;
     double AsDouble() const;
@@ -46,8 +43,10 @@ public:
 
     JType Type() { return value_ ? value_->type() : JType::JNULL; }
 
-    static Json MakeObject();
-    static Json MakeArray();
+    // these functions are meant to be used as literals 
+    // so they has short lower case names
+    static Json obj(std::initializer_list<std::pair<const std::string, Json>> const &lst = {});
+    static Json arr(std::initializer_list<Json> const &lst = {});
 private:
     std::shared_ptr<inner::json_model::JsonValue> value_;
 };

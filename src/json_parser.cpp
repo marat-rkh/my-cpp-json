@@ -94,15 +94,15 @@ Json JsonParser::ParseJObject() {
     }
     if(lexer_.PeekToken().type() == Token::Type::C_BR_CLOSED) {
         lexer_.GetToken();
-        return Json::MakeObject();
+        return Json::obj();
     }
-    Json obj;
+    Json obj = Json::obj();
     while(true) {
         auto res = ParseKeyValue();
         if(error_occured_) {
             return Json();
         }
-        obj += res;
+        obj[res.first] = res.second;
         if(lexer_.PeekToken().type() == Token::Type::COMMA) {
             lexer_.GetToken();
         } else {
@@ -140,9 +140,9 @@ Json JsonParser::ParseJArray() {
     }
     if(lexer_.PeekToken().type() == Token::Type::SQ_BR_CLOSED) {
         lexer_.GetToken();
-        return Json::MakeArray();
+        return Json::arr();
     }
-    Json arr;
+    Json arr = Json::arr();
     while(true) {
         auto res = ParseJValue();
         if(error_occured_) {
