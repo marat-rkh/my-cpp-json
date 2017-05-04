@@ -44,7 +44,7 @@ public:
     JType Type() { return value_ ? value_->type() : JType::JNULL; }
 
     // these functions are meant to be used as literals 
-    // so they has short lower case names
+    // so they have short lower case names
     static Json obj(std::initializer_list<std::pair<const std::string, Json>> const &lst = {});
     static Json arr(std::initializer_list<Json> const &lst = {});
 private:

@@ -1,4 +1,5 @@
 set(SRC 
+    json_model.cpp
     json.cpp
     json_parser.cpp
     lexer.cpp

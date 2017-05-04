@@ -11,7 +11,7 @@ using std::pair;
 using std::runtime_error;
 using std::initializer_list;
 
-Json::Json(std::string const& str)
+Json::Json(string const& str)
     : value_(make_shared<JsonString>(str))
 {}
 
@@ -23,16 +23,19 @@ Json::Json(bool b)
     : value_(make_shared<JsonBool>(b))
 {}
 
-Json::Json(std::initializer_list<std::pair<const std::string, Json>> const &lst)
+Json::Json(initializer_list<pair<const string, Json>> const &lst)
     : value_(make_shared<JsonObject>(lst))
 {}
+
+inline string InvalidOperation(string const &prefix, JType const &t) {
+    return prefix + JTypeUtils::ToString(t);
+}
 
 Json const &Json::operator[](string const &field_name) const {
     if(value_->type() == JType::JOBJECT) {
         return as<JsonObject>(value_)->value()[field_name];
-    } else {
-        throw runtime_error("attempt to access field on non object json value");
     }
+    throw runtime_error(InvalidOperation("attempt to access field on ", value_->type()));
 }
 
 Json &Json::operator[](string const &field_name) {
@@ -44,9 +47,8 @@ Json &Json::operator[](string const &field_name) {
 Json const &Json::operator[](size_type index) const {
     if(value_->type() == JType::JARRAY) {
         return as<JsonArray>(value_)->value()[index];
-    } else {
-        throw runtime_error("attempt to index non array json value");
     }
+    throw runtime_error(InvalidOperation("attempt to index ", value_->type()));
 }
 
 Json &Json::operator[](size_type index) {
@@ -59,9 +61,8 @@ Json &Json::operator+=(Json const& val) {
     if(value_->type() == JType::JARRAY) {
         as<JsonArray>(value_)->value().push_back(val);
         return *this;
-    } else {
-        throw runtime_error("attempt to element to non array json value");
     }
+    throw runtime_error(InvalidOperation("attempt to append element to ", value_->type()));
 }
 
 Json &Json::operator=(Json const& other) {
@@ -71,30 +72,35 @@ Json &Json::operator=(Json const& other) {
     return *this;
 }
 
+inline string BadConversion(JType const &from, string const &to) {
+    string msg = "attempt to convert ";
+    return msg + JTypeUtils::ToString(from) + " to " + to;
+}
+
 string const &Json::AsString() const {
     if(!value_ || value_->type() != JType::JSTRING) {
-        throw runtime_error("attempt to convert non string json value to string");
+        throw runtime_error(BadConversion(value_->type(), "string"));
     }
     return as<JsonString>(value_)->value();
 }
 
 double Json::AsDouble() const {
     if(!value_ || value_->type() != JType::JNUMBER) {
-        throw runtime_error("attempt to convert non numeric json value to double");
+        throw runtime_error(BadConversion(value_->type(), "double"));
     }
     return as<JsonNumber>(value_)->value();
 }
 
 bool Json::AsBool() const {
     if(!value_ || value_->type() != JType::JBOOL) {
-        throw runtime_error("attempt to convert non bool json value to bool");
+        throw runtime_error(BadConversion(value_->type(), "bool"));
     }
     return as<JsonBool>(value_)->value();
 }
 
-std::nullptr_t Json::AsNull() const {
+nullptr_t Json::AsNull() const {
     if(value_) {
-        throw runtime_error("attempt to convert non null json value to nullptr");
+        throw runtime_error(BadConversion(value_->type(), "nullptr"));
     }
     return nullptr;
 }

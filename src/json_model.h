@@ -19,6 +19,11 @@ enum class JType {
     JNULL
 };
 
+class JTypeUtils {
+public:
+    static std::string ToString(JType const &t);
+};
+
 namespace inner { namespace json_model {
 
 class JsonValue {
@@ -49,9 +54,7 @@ private:
 class JsonObject: public JsonValue {
 public:
     JsonObject() = default;
-    explicit JsonObject(std::initializer_list<std::pair<const std::string, Json>> const &lst)
-        : value_(lst)
-    {}
+    explicit JsonObject(std::initializer_list<std::pair<const std::string, Json>> const &lst);
 
     JType type() const override { return JType::JOBJECT; }
     std::map<std::string, Json> &value() { return value_; }
@@ -64,9 +67,7 @@ public:
     using size_type = std::vector<JsonValue>::size_type;
 
     JsonArray() = default;
-    explicit JsonArray(std::initializer_list<Json> const &lst)
-        : value_(lst)
-    {}
+    explicit JsonArray(std::initializer_list<Json> const &lst);
 
     JType type() const override { return JType::JARRAY; }
     std::vector<Json> &value() { return value_; }
