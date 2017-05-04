@@ -6,25 +6,24 @@ using namespace json_cpp;
 using namespace json_cpp::inner::json_model;
 
 using std::string;
-using std::make_shared;
 using std::pair;
 using std::runtime_error;
 using std::initializer_list;
 
 Json::Json(string const& str)
-    : value_(make_shared<JsonString>(str))
+    : value_(new JsonString(str))
 {}
 
 Json::Json(double num)
-    : value_(make_shared<JsonNumber>(num))
+    : value_(new JsonNumber(num))
 {}
 
 Json::Json(bool b)
-    : value_(make_shared<JsonBool>(b))
+    : value_(new JsonBool(b))
 {}
 
 Json::Json(initializer_list<pair<const string, Json>> const &lst)
-    : value_(make_shared<JsonObject>(lst))
+    : value_(new JsonObject(lst))
 {}
 
 inline string InvalidOperation(string const &prefix, JType const &t) {
@@ -113,6 +112,6 @@ Json Json::obj(initializer_list<pair<const string, Json>> const &lst) {
 
 Json Json::arr(initializer_list<Json> const &lst) {
     Json arr;
-    arr.value_ = make_shared<JsonArray>(lst);
+    arr.value_.reset(new JsonArray(lst));
     return arr;
 }
