@@ -64,11 +64,68 @@ Json &Json::operator+=(Json const& val) {
     throw runtime_error(InvalidOperation("attempt to append element to ", value_->type()));
 }
 
+// TODO remove this, synthesized version does the same
 Json &Json::operator=(Json const& other) {
     if(this != &other) {
         value_ = other.value_;
     }
     return *this;
+}
+
+Json::object_iterator Json::ObjectBegin() {
+    if(value_->type() == JType::JOBJECT) {
+        return as<JsonObject>(value_)->value().begin();
+    }
+    throw runtime_error(InvalidOperation("attempt to access object iterator on ", value_->type()));
+}
+
+Json::object_const_iterator Json::ObjectBegin() const {
+    if(value_->type() == JType::JOBJECT) {
+        return as<JsonObject>(value_)->value().begin();
+    }
+    throw runtime_error(InvalidOperation("attempt to access object iterator on ", value_->type()));
+}
+
+Json::object_iterator Json::ObjectEnd() {
+    if(value_->type() == JType::JOBJECT) {
+        return as<JsonObject>(value_)->value().end();
+    }
+    throw runtime_error(InvalidOperation("attempt to access object iterator on ", value_->type()));
+}
+
+Json::object_const_iterator Json::ObjectEnd() const {
+    if(value_->type() == JType::JOBJECT) {
+        return as<JsonObject>(value_)->value().end();
+    }
+    throw runtime_error(InvalidOperation("attempt to access object iterator on ", value_->type()));
+}
+
+Json::array_iterator Json::ArrayBegin() {
+    if(value_->type() == JType::JARRAY) {
+        return as<JsonArray>(value_)->value().begin();
+    }
+    throw runtime_error(InvalidOperation("attempt to access array iterator on ", value_->type()));
+}
+
+Json::array_const_iterator Json::ArrayBegin() const {
+    if(value_->type() == JType::JARRAY) {
+        return as<JsonArray>(value_)->value().begin();
+    }
+    throw runtime_error(InvalidOperation("attempt to access array iterator on ", value_->type()));
+}
+
+Json::array_iterator Json::ArrayEnd() {
+    if(value_->type() == JType::JARRAY) {
+        return as<JsonArray>(value_)->value().end();
+    }
+    throw runtime_error(InvalidOperation("attempt to access array iterator on ", value_->type()));
+}
+
+Json::array_const_iterator Json::ArrayEnd() const {
+    if(value_->type() == JType::JARRAY) {
+        return as<JsonArray>(value_)->value().end();
+    }
+    throw runtime_error(InvalidOperation("attempt to access array iterator on ", value_->type()));
 }
 
 inline string BadConversion(JType const &from, string const &to) {

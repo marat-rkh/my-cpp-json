@@ -9,3 +9,7 @@ target_link_libraries(lexer.test gtest_main json-cpp)
 set(TEST_SRC json_parser_tests.cpp)
 add_executable(json_parser.test ${TEST_SRC})
 target_link_libraries(json_parser.test gtest_main json-cpp)
+
+set(TEST_SRC json_serializer_tests.cpp)
+add_executable(json_serializer.test ${TEST_SRC})
+target_link_libraries(json_serializer.test gtest_main json-cpp)

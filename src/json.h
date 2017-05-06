@@ -16,6 +16,10 @@ namespace json_cpp {
 class Json {
 public:
     using size_type = inner::json_model::JsonArray::size_type;
+    using object_iterator = inner::json_model::JsonObject::iterator;
+    using object_const_iterator = inner::json_model::JsonObject::const_iterator;
+    using array_iterator = inner::json_model::JsonArray::iterator;
+    using array_const_iterator = inner::json_model::JsonArray::const_iterator;
 
     Json() = default;
     Json(std::nullptr_t np): Json() {}
@@ -36,12 +40,21 @@ public:
 
     Json &operator=(Json const& other);
 
+    object_iterator ObjectBegin();
+    object_const_iterator ObjectBegin() const;
+    object_iterator ObjectEnd();
+    object_const_iterator ObjectEnd() const;
+    array_iterator ArrayBegin();
+    array_const_iterator ArrayBegin() const;
+    array_iterator ArrayEnd();
+    array_const_iterator ArrayEnd() const;
+
     std::string const &AsString() const;
     double AsDouble() const;
     bool AsBool() const;
     std::nullptr_t AsNull() const;
 
-    JType Type() { return value_ ? value_->type() : JType::JNULL; }
+    JType Type() const { return value_ ? value_->type() : JType::JNULL; }
 
     // these functions are meant to be used as literals 
     // so they have short lower case names

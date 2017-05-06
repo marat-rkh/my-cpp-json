@@ -53,10 +53,15 @@ private:
 
 class JsonObject: public JsonValue {
 public:
+    using iterator = std::map<std::string, Json>::iterator;
+    using const_iterator = std::map<std::string, Json>::const_iterator;
+    
     JsonObject() = default;
     explicit JsonObject(std::initializer_list<std::pair<const std::string, Json>> const &lst);
 
     JType type() const override { return JType::JOBJECT; }
+    // TODO change to custom map that keeps insertion order
+    // (e.g. as a vector of string*)
     std::map<std::string, Json> &value() { return value_; }
 private:
     std::map<std::string, Json> value_;
@@ -64,7 +69,9 @@ private:
 
 class JsonArray: public JsonValue {
 public:
-    using size_type = std::vector<JsonValue>::size_type;
+    using size_type = std::vector<Json>::size_type;
+    using iterator = std::vector<Json>::iterator;
+    using const_iterator = std::vector<Json>::const_iterator;
 
     JsonArray() = default;
     explicit JsonArray(std::initializer_list<Json> const &lst);
