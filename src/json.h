@@ -30,6 +30,13 @@ public:
     Json(bool b);
     Json(std::initializer_list<std::pair<const std::string, Json>> const &lst);
 
+    Json(Json const&other);
+    Json(Json &&other) noexcept;
+    ~Json();
+
+    Json &operator=(Json const &other);
+    Json &operator=(Json &&other) noexcept;
+
     Json const &operator[](std::string const &field_name) const;
     Json &operator[](std::string const &field_name);
 
@@ -37,8 +44,6 @@ public:
     Json &operator[](size_type index);
 
     Json &operator+=(Json const& val);
-
-    Json &operator=(Json const& other);
 
     object_iterator ObjectBegin();
     object_const_iterator ObjectBegin() const;
@@ -62,6 +67,14 @@ public:
     static Json arr(std::initializer_list<Json> const &lst = {});
 private:
     std::shared_ptr<inner::json_model::JsonValue> value_;
+
+    template<typename T>
+    void CopyAs(Json const &json) {
+        auto val = as<T>(json.value_);
+        value_.reset(new T(*val));
+    }
+
+    void CopyValue(Json const &json);
 };
 
 }

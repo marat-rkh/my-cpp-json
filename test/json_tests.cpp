@@ -183,6 +183,48 @@ TEST(json, should_handle_real_world2_json) {
     ASSERT_EQ(obj["widget"]["text"]["onMouseUp"].AsString(), "sun1.opacity = (sun1.opacity / 100) * 90;");
 }
 
+TEST(json, should_be_copied) {
+    Json json {
+        {"a", 1},
+        {"b", {
+            {"c", 2}
+        }}
+    };
+    Json copy1(json);
+    copy1["a"] = 3;
+    ASSERT_EQ(json["a"].AsDouble(), 1);
+    ASSERT_EQ(json["b"]["c"].AsDouble(), 2);
+    ASSERT_EQ(copy1["a"].AsDouble(), 3);
+    ASSERT_EQ(copy1["b"]["c"].AsDouble(), 2);
+    Json copy2;
+    copy2 = json;
+    copy2["b"]["c"] = 4;
+    ASSERT_EQ(json["a"].AsDouble(), 1);
+    ASSERT_EQ(json["b"]["c"].AsDouble(), 2);
+    ASSERT_EQ(copy2["a"].AsDouble(), 1);
+    ASSERT_EQ(copy2["b"]["c"].AsDouble(), 4);
+}
+
+TEST(json, should_be_moved) {
+    Json json {
+        {"a", 1},
+        {"b", {
+            {"c", 2}
+        }}
+    };
+    Json moved1(std::move(json));
+    moved1["a"] = 3;
+    ASSERT_EQ(json.Type(), JType::JNULL);
+    ASSERT_EQ(moved1["a"].AsDouble(), 3);
+    ASSERT_EQ(moved1["b"]["c"].AsDouble(), 2);
+    Json moved2;
+    moved2 = std::move(moved1);
+    moved2["b"]["c"] = 4;
+    ASSERT_EQ(moved1.Type(), JType::JNULL);
+    ASSERT_EQ(moved2["a"].AsDouble(), 3);
+    ASSERT_EQ(moved2["b"]["c"].AsDouble(), 4);
+}
+
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
