@@ -29,6 +29,7 @@ namespace inner { namespace json_model {
 class JsonValue {
 public:
     virtual JType type() const = 0;
+    virtual ~JsonValue() {}
 };
 
 class JsonString: public JsonValue {
