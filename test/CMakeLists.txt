@@ -13,3 +13,7 @@ target_link_libraries(json_parser.test gtest_main json-cpp)
 set(TEST_SRC json_serializer_tests.cpp)
 add_executable(json_serializer.test ${TEST_SRC})
 target_link_libraries(json_serializer.test gtest_main json-cpp)
+
+set(TEST_SRC ordered_hashmap_tests.cpp)
+add_executable(ordered_hashmap.test ${TEST_SRC})
+target_link_libraries(ordered_hashmap.test gtest_main json-cpp)
