@@ -6,8 +6,14 @@
 #include <initializer_list>
 #include <iterator>
 
+#include "ordered_map_iterator.h"
+
 namespace json_cpp { namespace inner { namespace utils {
 
+/*
+* Adapter for unordered_map with iterators traversing 
+* map entries in the order they were inserted.
+*/
 template<
     typename Key, 
     typename Val, 
@@ -17,14 +23,16 @@ template<
 class OrderedHashMap final {
 private:
     using HashMap = std::unordered_map<Key, Val, Hash, KeyEq>;
-    template<typename ItVal, typename Map> class Iterator;
+    using KeyList = std::list<Key>;
 public:
-    using key_type = Key;
-    using mapped_type = Val;
-    using value_type = std::pair<Key const, Val>;
-    using size_type = typename std::unordered_map<Key, Val, Hash, KeyEq>::size_type;
-    using iterator = Iterator<value_type, HashMap>;
-    using const_iterator = Iterator<value_type const, HashMap const>;
+    using key_type = typename HashMap::key_type;
+    using mapped_type = typename HashMap::mapped_type;
+    using value_type = typename HashMap::value_type;
+    using size_type = typename HashMap::size_type;
+    using iterator = 
+        OrderedMapIterator<value_type, HashMap, typename KeyList::const_iterator>;
+    using const_iterator = 
+        OrderedMapIterator<value_type const, HashMap const, typename KeyList::const_iterator>;
 
     OrderedHashMap() = default;
     OrderedHashMap(std::initializer_list<value_type> init)
@@ -83,40 +91,7 @@ public:
     }
 private:
     HashMap map_;
-    std::list<Key> order_;
-
-    template<typename ItVal, typename Map>
-    class Iterator: public std::iterator<std::input_iterator_tag, ItVal> {
-    public:
-        using list_iterator = typename std::list<Key>::const_iterator;
-
-        Iterator(Map &m, list_iterator const &pos)
-            : map_(m)
-            , pos_(pos)
-        {}
-
-        Iterator &operator++() {
-            ++pos_;
-            return *this;
-        }
-
-        Iterator operator++(int) {
-            Iterator ret = *this;
-            ++pos_;
-            return ret;
-        }
-
-        bool operator==(Iterator const &other) const noexcept {
-            return pos_ == other.pos_ && &map_ == &other.map_;
-        }
-
-        bool operator!=(Iterator const &other) const noexcept { return !(*this == other); }
-        
-        ItVal &operator*() const { return *map_.find(*pos_); }
-    private:
-        Map &map_;
-        list_iterator pos_;
-    };
+    KeyList order_;
 };
 
 }}}
