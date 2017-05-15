@@ -5,14 +5,18 @@
 #include <list>
 #include <initializer_list>
 #include <iterator>
+#include <functional>
 
-#include "ordered_map_iterator.h"
+#include "mapping_iterator.h"
 
 namespace json_cpp { namespace inner { namespace utils {
 
 /*
 * Adapter for unordered_map with iterators traversing 
 * map entries in the order they were inserted.
+* 
+* TODO Abstract over map type as the class does not use 
+* any unordered_map specific operations
 */
 template<
     typename Key, 
@@ -29,10 +33,8 @@ public:
     using mapped_type = typename HashMap::mapped_type;
     using value_type = typename HashMap::value_type;
     using size_type = typename HashMap::size_type;
-    using iterator = 
-        OrderedMapIterator<value_type, HashMap, typename KeyList::const_iterator>;
-    using const_iterator = 
-        OrderedMapIterator<value_type const, HashMap const, typename KeyList::const_iterator>;
+    using iterator = MappingIterator<typename KeyList::const_iterator, value_type &>;
+    using const_iterator = MappingIterator<typename KeyList::const_iterator, value_type const &>;
 
     OrderedHashMap() = default;
     OrderedHashMap(std::initializer_list<value_type> init)
@@ -71,12 +73,12 @@ public:
         return num_removed;
     }
 
-    iterator begin() noexcept { return iterator(map_, order_.begin()); }
-    iterator end() noexcept { return iterator(map_, order_.end()); }
-    const_iterator begin() const noexcept { return const_iterator(map_, order_.begin()); }
-    const_iterator end() const noexcept { return const_iterator(map_, order_.end()); }
-    const_iterator cbegin() const noexcept { return const_iterator(map_, order_.begin()); }
-    const_iterator cend() const noexcept { return const_iterator(map_, order_.end()); }
+    iterator begin() noexcept { return MakeMappingBegin(order_.cbegin(), EntryGetter()); }
+    iterator end() noexcept { return MakeMappingEnd(order_.cend(), EntryGetter()); }
+    const_iterator begin() const noexcept { return MakeMappingBegin(order_.begin(), EntryGetter()); }
+    const_iterator end() const noexcept { return MakeMappingEnd(order_.end(), EntryGetter()); }
+    const_iterator cbegin() const noexcept { return MakeMappingBegin(order_.begin(), EntryGetter()); }
+    const_iterator cend() const noexcept { return MakeMappingEnd(order_.end(), EntryGetter()); }
 
     // special members
     size_type shrink_to_fit() {
@@ -92,6 +94,14 @@ public:
 private:
     HashMap map_;
     KeyList order_;
+
+    std::function<value_type &(Key const&)> EntryGetter() {
+        return [this](Key const &k)->value_type &{ return *map_.find(k); };
+    }
+
+    std::function<value_type const &(Key const&)> EntryGetter() const {
+        return [this](Key const &k)->value_type const &{ return *map_.find(k); };
+    }
 };
 
 }}}

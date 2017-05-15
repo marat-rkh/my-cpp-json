@@ -17,3 +17,7 @@ target_link_libraries(json_serializer.test gtest_main json-cpp)
 set(TEST_SRC ordered_hashmap_tests.cpp)
 add_executable(ordered_hashmap.test ${TEST_SRC})
 target_link_libraries(ordered_hashmap.test gtest_main json-cpp)
+
+set(TEST_SRC mapping_iterator_tests.cpp)
+add_executable(mapping_iterator.test ${TEST_SRC})
+target_link_libraries(mapping_iterator.test gtest_main json-cpp)
