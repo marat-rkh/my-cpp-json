@@ -12,6 +12,7 @@
 #include "utils.h"
 #include "mapping_iterator.h"
 #include "json_ref.h"
+#include "json_accessors.h"
 
 namespace json_cpp {
 
@@ -23,7 +24,7 @@ private:
     template<typename V>
     using ObjectEntry = std::pair<std::string const, V>;
 public:
-    using size_type = inner::json_model::JsonArray::size_type;
+    using size_type = JsonAccessors::size_type;
     using object_iterator = 
         inner::utils::MappingIterator<
             inner::json_model::JsonObject::iterator,

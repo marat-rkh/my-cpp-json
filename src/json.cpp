@@ -69,31 +69,19 @@ inline string InvalidOperation(string const &prefix, JType const &t) {
 }
 
 JsonRef const Json::operator[](string const &field_name) const {
-    if(value_->type() == JType::JOBJECT) {
-        return JsonRef(as<JsonObject>(value_)->value()[field_name]);
-    }
-    throw runtime_error(InvalidOperation("attempt to access field on ", value_->type()));
+    return JsonAccessors::AccessField(value_, field_name);
 }
 
 JsonRef Json::operator[](string const &field_name) {
-    if(value_->type() == JType::JOBJECT) {
-        return JsonRef(as<JsonObject>(value_)->value()[field_name]);
-    }
-    throw runtime_error(InvalidOperation("attempt to access field on ", value_->type()));
+    return JsonAccessors::AccessField(value_, field_name);
 }
 
 JsonRef const Json::operator[](size_type index) const {
-    if(value_->type() == JType::JARRAY) {
-        return JsonRef(as<JsonArray>(value_)->value()[index]);
-    }
-    throw runtime_error(InvalidOperation("attempt to index ", value_->type()));
+    return JsonAccessors::AccessElem(value_, index);
 }
 
 JsonRef Json::operator[](size_type index) {
-    if(value_->type() == JType::JARRAY) {
-        return JsonRef(as<JsonArray>(value_)->value()[index]);
-    }
-    throw runtime_error(InvalidOperation("attempt to index ", value_->type()));
+    return JsonAccessors::AccessElem(value_, index);
 }
 
 Json &Json::operator+=(Json const& val) {
