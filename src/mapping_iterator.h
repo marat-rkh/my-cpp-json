@@ -16,7 +16,7 @@ public:
     using input_type = typename Iter::reference;
     using result_type = Val;
 
-    MappingIterator(Iter const &iter, nullptr_t np)
+    MappingIterator(Iter const &iter, std::nullptr_t np)
         : iter_(iter)
         , mapper_(np)
     {}

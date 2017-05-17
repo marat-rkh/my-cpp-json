@@ -5,10 +5,11 @@
 #include <map>
 #include <vector>
 #include <initializer_list>
+#include <memory>
+
+#include "ordered_hashmap.h"
 
 namespace json_cpp {
-
-class Json;
 
 enum class JType {
     JSTRING,
@@ -54,33 +55,35 @@ private:
 
 class JsonObject: public JsonValue {
 public:
-    using iterator = std::map<std::string, Json>::iterator;
-    using const_iterator = std::map<std::string, Json>::const_iterator;
+    using iterator = 
+        utils::OrderedHashMap<std::string, std::shared_ptr<JsonValue>>::iterator;
+    using const_iterator = 
+        utils::OrderedHashMap<std::string, std::shared_ptr<JsonValue>>::const_iterator;
     
     JsonObject() = default;
-    explicit JsonObject(std::initializer_list<std::pair<const std::string, Json>> const &lst);
+    explicit JsonObject(
+        std::initializer_list<std::pair<std::string const, std::shared_ptr<JsonValue>>> const &lst
+    );
 
     JType type() const override { return JType::JOBJECT; }
-    // TODO change to custom map that keeps insertion order
-    // (e.g. as a vector of string*)
-    std::map<std::string, Json> &value() { return value_; }
+    utils::OrderedHashMap<std::string, std::shared_ptr<JsonValue>> &value() { return value_; }
 private:
-    std::map<std::string, Json> value_;
+    utils::OrderedHashMap<std::string, std::shared_ptr<JsonValue>> value_;
 };
 
 class JsonArray: public JsonValue {
 public:
-    using size_type = std::vector<Json>::size_type;
-    using iterator = std::vector<Json>::iterator;
-    using const_iterator = std::vector<Json>::const_iterator;
+    using size_type = std::vector<std::shared_ptr<JsonValue>>::size_type;
+    using iterator = std::vector<std::shared_ptr<JsonValue>>::iterator;
+    using const_iterator = std::vector<std::shared_ptr<JsonValue>>::const_iterator;
 
     JsonArray() = default;
-    explicit JsonArray(std::initializer_list<Json> const &lst);
+    explicit JsonArray(std::initializer_list<std::shared_ptr<JsonValue>> const &lst);
 
     JType type() const override { return JType::JARRAY; }
-    std::vector<Json> &value() { return value_; }
+    std::vector<std::shared_ptr<JsonValue>> &value() { return value_; }
 private:
-    std::vector<Json> value_;
+    std::vector<std::shared_ptr<JsonValue>> value_;
 };
 
 class JsonBool: public JsonValue {
@@ -92,6 +95,8 @@ public:
 private:
     bool value_ = false;
 };
+
+std::shared_ptr<JsonValue> CopyJsonTree(std::shared_ptr<JsonValue> const &original);
 
 }} // namespace inner::json_model
 

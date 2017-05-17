@@ -52,6 +52,15 @@ public:
         return map_[key];
     }
 
+    bool insert(Key const &key, Val const &value) {
+        if(map_.find(key) == map_.end()) {
+            order_.push_back(key);
+            map_.insert(std::make_pair(key, value));
+            return true;
+        }
+        return false;
+    }
+
     bool contains(Key const &key) const {
         return map_.find(key) != map_.end();
     }

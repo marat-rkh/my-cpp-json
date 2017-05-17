@@ -10,16 +10,40 @@
 
 #include "json_model.h"
 #include "utils.h"
+#include "mapping_iterator.h"
+#include "json_ref.h"
 
 namespace json_cpp {
 
+class JsonRef;
+
 class Json {
+    friend class JsonRef;
+private:
+    template<typename V>
+    using ObjectEntry = std::pair<std::string const, V>;
 public:
     using size_type = inner::json_model::JsonArray::size_type;
-    using object_iterator = inner::json_model::JsonObject::iterator;
-    using object_const_iterator = inner::json_model::JsonObject::const_iterator;
-    using array_iterator = inner::json_model::JsonArray::iterator;
-    using array_const_iterator = inner::json_model::JsonArray::const_iterator;
+    using object_iterator = 
+        inner::utils::MappingIterator<
+            inner::json_model::JsonObject::iterator,
+            ObjectEntry<JsonRef>
+        >;
+    using object_const_iterator = 
+        inner::utils::MappingIterator<
+            inner::json_model::JsonObject::iterator,
+            ObjectEntry<JsonRef const>
+        >;
+    using array_iterator = 
+        inner::utils::MappingIterator<
+            typename inner::json_model::JsonArray::iterator,
+            JsonRef
+        >;
+    using array_const_iterator =  
+        inner::utils::MappingIterator<
+            typename inner::json_model::JsonArray::iterator,
+            JsonRef const
+        >;
 
     Json() = default;
     Json(std::nullptr_t np): Json() {}
@@ -29,6 +53,7 @@ public:
     Json(int num): Json(static_cast<double>(num)) {}
     Json(bool b);
     Json(std::initializer_list<std::pair<const std::string, Json>> const &lst);
+    Json(JsonRef const &json_ref);
 
     Json(Json const&other);
     Json(Json &&other) noexcept;
@@ -37,11 +62,11 @@ public:
     Json &operator=(Json const &other);
     Json &operator=(Json &&other) noexcept;
 
-    Json const &operator[](std::string const &field_name) const;
-    Json &operator[](std::string const &field_name);
+    JsonRef const operator[](std::string const &field_name) const;
+    JsonRef operator[](std::string const &field_name);
 
-    Json const &operator[](size_type index) const;
-    Json &operator[](size_type index);
+    JsonRef const operator[](size_type index) const;
+    JsonRef operator[](size_type index);
 
     Json &operator+=(Json const& val);
 
@@ -49,6 +74,7 @@ public:
     object_const_iterator ObjectBegin() const;
     object_iterator ObjectEnd();
     object_const_iterator ObjectEnd() const;
+
     array_iterator ArrayBegin();
     array_const_iterator ArrayBegin() const;
     array_iterator ArrayEnd();
@@ -66,15 +92,19 @@ public:
     static Json obj(std::initializer_list<std::pair<const std::string, Json>> const &lst = {});
     static Json arr(std::initializer_list<Json> const &lst = {});
 private:
-    std::shared_ptr<inner::json_model::JsonValue> value_;
+    using JsonValuePtr = std::shared_ptr<inner::json_model::JsonValue>;
 
-    template<typename T>
-    void CopyAs(Json const &json) {
-        auto val = as<T>(json.value_);
-        value_.reset(new T(*val));
+    JsonValuePtr value_;
+
+    static ObjectEntry<JsonRef> ProxyEntry(ObjectEntry<JsonValuePtr> &p) {
+        return std::make_pair(p.first, JsonRef(p.second));
+    }
+    static ObjectEntry<JsonRef const> ProxyEntryConst(ObjectEntry<JsonValuePtr> &p) {
+        return std::make_pair(p.first, JsonRef(p.second));
     }
 
-    void CopyValue(Json const &json);
+    static JsonRef Proxy(JsonValuePtr &ptr) { return JsonRef(ptr); }
+    static JsonRef const ProxyConst(JsonValuePtr &ptr) { return JsonRef(ptr); }
 };
 
 }
