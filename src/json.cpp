@@ -148,39 +148,6 @@ Json::array_const_iterator Json::ArrayEnd() const {
     throw runtime_error(InvalidOperation("attempt to access array iterator on ", value_->type()));
 }
 
-inline string BadConversion(JType const &from, string const &to) {
-    string msg = "attempt to convert ";
-    return msg + JTypeUtils::ToString(from) + " to " + to;
-}
-
-string const &Json::AsString() const {
-    if(!value_ || value_->type() != JType::JSTRING) {
-        throw runtime_error(BadConversion(value_->type(), "string"));
-    }
-    return as<JsonString>(value_)->value();
-}
-
-double Json::AsDouble() const {
-    if(!value_ || value_->type() != JType::JNUMBER) {
-        throw runtime_error(BadConversion(value_->type(), "double"));
-    }
-    return as<JsonNumber>(value_)->value();
-}
-
-bool Json::AsBool() const {
-    if(!value_ || value_->type() != JType::JBOOL) {
-        throw runtime_error(BadConversion(value_->type(), "bool"));
-    }
-    return as<JsonBool>(value_)->value();
-}
-
-nullptr_t Json::AsNull() const {
-    if(value_) {
-        throw runtime_error(BadConversion(value_->type(), "nullptr"));
-    }
-    return nullptr;
-}
-
 // static members
 
 Json Json::obj(initializer_list<pair<const string, Json>> const &lst) {

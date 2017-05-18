@@ -13,12 +13,13 @@
 #include "mapping_iterator.h"
 #include "json_ref.h"
 #include "json_accessors.h"
+#include "json_basic.h"
 
 namespace json_cpp {
 
 class JsonRef;
 
-class Json {
+class Json: public JsonBasic {
     friend class JsonRef;
 private:
     template<typename V>
@@ -81,17 +82,13 @@ public:
     array_iterator ArrayEnd();
     array_const_iterator ArrayEnd() const;
 
-    std::string const &AsString() const;
-    double AsDouble() const;
-    bool AsBool() const;
-    std::nullptr_t AsNull() const;
-
-    JType Type() const { return value_ ? value_->type() : JType::JNULL; }
-
     // these functions are meant to be used as literals 
     // so they have short lower case names
     static Json obj(std::initializer_list<std::pair<const std::string, Json>> const &lst = {});
     static Json arr(std::initializer_list<Json> const &lst = {});
+protected:
+    std::shared_ptr<inner::json_model::JsonValue> &Value() override { return value_; }
+    std::shared_ptr<inner::json_model::JsonValue> const &Value() const override { return value_; }
 private:
     using JsonValuePtr = std::shared_ptr<inner::json_model::JsonValue>;
 

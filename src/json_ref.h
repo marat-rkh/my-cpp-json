@@ -6,12 +6,13 @@
 
 #include "json_model.h"
 #include "json_accessors.h"
+#include "json_basic.h"
 
 namespace json_cpp {
 
 class Json;
 
-class JsonRef {
+class JsonRef: public JsonBasic {
     friend class Json;
 public:
     using size_type = JsonAccessors::size_type;
@@ -27,18 +28,14 @@ public:
     JsonRef(JsonRef &&r);
     JsonRef &operator=(JsonRef &&r);
 
-    std::string const &AsString() const;
-    double AsDouble() const;
-    bool AsBool() const;
-    std::nullptr_t AsNull() const;
-
-    JType Type() const { return value_ref_ ? value_ref_->type() : JType::JNULL; }
-
     JsonRef const operator[](std::string const &field_name) const;
     JsonRef operator[](std::string const &field_name);
 
     JsonRef const operator[](size_type index) const;
     JsonRef operator[](size_type index);
+protected:
+    std::shared_ptr<inner::json_model::JsonValue> &Value() override { return value_ref_; }
+    std::shared_ptr<inner::json_model::JsonValue> const &Value() const override { return value_ref_; }
 private:
     std::shared_ptr<inner::json_model::JsonValue> &value_ref_;
 };
