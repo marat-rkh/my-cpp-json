@@ -10,6 +10,7 @@
 namespace json_cpp {
 
 class Json;
+class ConstJsonRef;
 
 class JsonRef: public JsonMutable {
     friend class JsonMutable;
@@ -24,6 +25,10 @@ public:
     // and there is no meaning of moving reference
     JsonRef(JsonRef &&r);
     JsonRef &operator=(JsonRef &&r);
+
+    JsonRef &operator+=(Json const& elem);
+    JsonRef &operator+=(JsonRef const& elem);
+    JsonRef &operator+=(ConstJsonRef const& elem);
 protected:
     JsonValuePtr const &Value() const override { return value_ref_; }
     JsonValuePtr &Value() override { return value_ref_; }

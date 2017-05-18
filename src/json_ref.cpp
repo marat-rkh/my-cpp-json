@@ -41,6 +41,19 @@ JsonRef &JsonRef::operator=(JsonRef &&r) {
     return *this;
 }
 
+JsonRef &JsonRef::operator+=(Json const& elem) {
+    AddElemToArray(elem);
+    return *this;
+}
+JsonRef &JsonRef::operator+=(JsonRef const& elem) {
+    AddElemToArray(elem);
+    return *this;
+}
+JsonRef &JsonRef::operator+=(ConstJsonRef const& elem) {
+    AddElemToArray(elem);
+    return *this;
+}
+
 // private
 
 JsonRef::JsonRef(shared_ptr<JsonValue>& value_ref)

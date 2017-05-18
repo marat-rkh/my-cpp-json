@@ -17,6 +17,8 @@ public:
     JsonRef operator[](ArraySizeType index);
 protected:
     virtual JsonValuePtr &Value() = 0;
+
+    void AddElemToArray(JsonBasic const &elem);
 };
 
 }

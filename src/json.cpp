@@ -69,12 +69,17 @@ inline string InvalidOperation(string const &prefix, JType const &t) {
     return prefix + JTypeUtils::ToString(t);
 }
 
-Json &Json::operator+=(Json const& val) {
-    if(value_->type() == JType::JARRAY) {
-        as<JsonArray>(value_)->value().push_back(val.value_);
-        return *this;
-    }
-    throw runtime_error(InvalidOperation("attempt to append element to ", value_->type()));
+Json &Json::operator+=(Json const& elem) {
+    AddElemToArray(elem);
+    return *this;
+}
+Json &Json::operator+=(JsonRef const& elem) {
+    AddElemToArray(elem);
+    return *this;
+}
+Json &Json::operator+=(ConstJsonRef const& elem) {
+    AddElemToArray(elem);
+    return *this;
 }
 
 Json::object_iterator Json::ObjectBegin() {

@@ -16,7 +16,7 @@
 
 namespace json_cpp {
 
-class JsonRef;
+class ConstJsonRef;
 
 class Json: public JsonMutable {
     friend class JsonRef;
@@ -62,7 +62,9 @@ public:
     Json &operator=(Json const &other);
     Json &operator=(Json &&other) noexcept;
 
-    Json &operator+=(Json const& val);
+    Json &operator+=(Json const& elem);
+    Json &operator+=(JsonRef const& elem);
+    Json &operator+=(ConstJsonRef const& elem);
 
     object_iterator ObjectBegin();
     object_const_iterator ObjectBegin() const;

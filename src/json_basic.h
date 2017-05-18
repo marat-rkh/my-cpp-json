@@ -6,10 +6,12 @@
 
 namespace json_cpp {
 
+class JsonMutable;
 class ConstJsonRef;
 
 // TODO prohibit pointers creation
 class JsonBasic {
+    friend class JsonMutable;
 public:
     using ArraySizeType = inner::json_model::JsonArray::size_type;
 
