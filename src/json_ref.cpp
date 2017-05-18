@@ -41,22 +41,6 @@ JsonRef &JsonRef::operator=(JsonRef &&r) {
     return *this;
 }
 
-ConstJsonRef JsonRef::operator[](string const &field_name) const {
-    return ConstJsonRef(AccessField(field_name));
-}
-
-JsonRef JsonRef::operator[](string const &field_name) {
-    return JsonRef(AccessField(field_name));
-}
-
-ConstJsonRef JsonRef::operator[](ArraySizeType index) const {
-    return ConstJsonRef(AccessElem(index));
-}
-
-JsonRef JsonRef::operator[](ArraySizeType index) {
-    return JsonRef(AccessElem(index));
-}
-
 // private
 
 JsonRef::JsonRef(shared_ptr<JsonValue>& value_ref)

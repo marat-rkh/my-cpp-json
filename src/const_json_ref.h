@@ -9,15 +9,12 @@ class Json;
 class JsonRef;
 
 class ConstJsonRef: public JsonBasic {
+    friend JsonBasic;
     friend Json;
     friend JsonRef;
 public:
     ConstJsonRef(ConstJsonRef const &r) = default;
     ConstJsonRef(ConstJsonRef &&r);
-
-    ConstJsonRef operator[](std::string const &field_name) const;
-
-    ConstJsonRef operator[](ArraySizeType index) const;
 protected:
     JsonValuePtr const &Value() const override { return value_ref_; }
 private:

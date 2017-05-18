@@ -5,15 +5,18 @@
 
 namespace json_cpp {
 
+class JsonRef;
+
 // TODO prohibit pointers creation
 class JsonMutable: public JsonBasic {
+public:
+    using JsonBasic::operator[]; // const version
+    JsonRef operator[](std::string const &field_name);
+
+    using JsonBasic::operator[]; // const version
+    JsonRef operator[](ArraySizeType index);
 protected:
     virtual JsonValuePtr &Value() = 0;
-
-    using JsonBasic::AccessField; // const version
-    JsonValuePtr &AccessField(std::string const &field_name);
-    using JsonBasic::AccessElem; // const version
-    JsonValuePtr &AccessElem(ArraySizeType index);
 };
 
 }

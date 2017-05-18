@@ -12,7 +12,6 @@
 #include "utils.h"
 #include "mapping_iterator.h"
 #include "json_ref.h"
-#include "json_accessors.h"
 #include "json_mutable.h"
 
 namespace json_cpp {
@@ -62,12 +61,6 @@ public:
 
     Json &operator=(Json const &other);
     Json &operator=(Json &&other) noexcept;
-
-    ConstJsonRef operator[](std::string const &field_name) const;
-    JsonRef operator[](std::string const &field_name);
-
-    ConstJsonRef operator[](ArraySizeType index) const;
-    JsonRef operator[](ArraySizeType index);
 
     Json &operator+=(Json const& val);
 

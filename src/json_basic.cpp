@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 #include "utils.h"
+#include "const_json_ref.h"
 
 using namespace json_cpp;
 using namespace json_cpp::inner::json_model;
@@ -47,6 +48,14 @@ nullptr_t JsonBasic::AsNull() const {
         throw runtime_error(BadConversion(val->type(), "nullptr"));
     }
     return nullptr;
+}
+
+ConstJsonRef JsonBasic::operator[](std::string const &field_name) const {
+    return ConstJsonRef(AccessField(field_name));
+}
+    
+ConstJsonRef JsonBasic::operator[](ArraySizeType index) const {
+    return ConstJsonRef(AccessElem(index));
 }
 
 inline string InvalidOperation(string const &prefix, JType const &t) {

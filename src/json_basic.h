@@ -6,6 +6,8 @@
 
 namespace json_cpp {
 
+class ConstJsonRef;
+
 // TODO prohibit pointers creation
 class JsonBasic {
 public:
@@ -20,6 +22,9 @@ public:
         auto &val = Value();
         return val ? val->type() : JType::JNULL; 
     }
+
+    ConstJsonRef operator[](std::string const &field_name) const;
+    ConstJsonRef operator[](ArraySizeType index) const;
 protected:
     using JsonValuePtr = std::shared_ptr<inner::json_model::JsonValue>;
 

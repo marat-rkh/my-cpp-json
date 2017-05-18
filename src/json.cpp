@@ -69,22 +69,6 @@ inline string InvalidOperation(string const &prefix, JType const &t) {
     return prefix + JTypeUtils::ToString(t);
 }
 
-ConstJsonRef Json::operator[](string const &field_name) const {
-    return ConstJsonRef(AccessField(field_name));
-}
-
-JsonRef Json::operator[](string const &field_name) {
-    return JsonRef(AccessField(field_name));
-}
-
-ConstJsonRef Json::operator[](ArraySizeType index) const {
-    return ConstJsonRef(AccessElem(index));
-}
-
-JsonRef Json::operator[](ArraySizeType index) {
-    return JsonRef(AccessElem(index));
-}
-
 Json &Json::operator+=(Json const& val) {
     if(value_->type() == JType::JARRAY) {
         as<JsonArray>(value_)->value().push_back(val.value_);
