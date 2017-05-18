@@ -13,19 +13,18 @@
 #include "mapping_iterator.h"
 #include "json_ref.h"
 #include "json_accessors.h"
-#include "json_basic.h"
+#include "json_mutable.h"
 
 namespace json_cpp {
 
 class JsonRef;
 
-class Json: public JsonBasic {
+class Json: public JsonMutable {
     friend class JsonRef;
 private:
     template<typename V>
     using ObjectEntry = std::pair<std::string const, V>;
 public:
-    using size_type = JsonAccessors::size_type;
     using object_iterator = 
         inner::utils::MappingIterator<
             inner::json_model::JsonObject::iterator,
@@ -64,11 +63,11 @@ public:
     Json &operator=(Json const &other);
     Json &operator=(Json &&other) noexcept;
 
-    JsonRef const operator[](std::string const &field_name) const;
+    ConstJsonRef operator[](std::string const &field_name) const;
     JsonRef operator[](std::string const &field_name);
 
-    JsonRef const operator[](size_type index) const;
-    JsonRef operator[](size_type index);
+    ConstJsonRef operator[](ArraySizeType index) const;
+    JsonRef operator[](ArraySizeType index);
 
     Json &operator+=(Json const& val);
 
@@ -87,11 +86,9 @@ public:
     static Json obj(std::initializer_list<std::pair<const std::string, Json>> const &lst = {});
     static Json arr(std::initializer_list<Json> const &lst = {});
 protected:
-    std::shared_ptr<inner::json_model::JsonValue> &Value() override { return value_; }
-    std::shared_ptr<inner::json_model::JsonValue> const &Value() const override { return value_; }
+    JsonValuePtr const &Value() const override { return value_; }
+    JsonValuePtr &Value() override { return value_; }
 private:
-    using JsonValuePtr = std::shared_ptr<inner::json_model::JsonValue>;
-
     JsonValuePtr value_;
 
     static ObjectEntry<JsonRef> ProxyEntry(ObjectEntry<JsonValuePtr> &p) {

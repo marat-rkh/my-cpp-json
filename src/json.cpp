@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include "json_ref.h"
+#include "const_json_ref.h"
 
 using namespace json_cpp;
 using namespace json_cpp::inner::json_model;
@@ -68,20 +69,20 @@ inline string InvalidOperation(string const &prefix, JType const &t) {
     return prefix + JTypeUtils::ToString(t);
 }
 
-JsonRef const Json::operator[](string const &field_name) const {
-    return JsonAccessors::AccessField(value_, field_name);
+ConstJsonRef Json::operator[](string const &field_name) const {
+    return ConstJsonRef(AccessField(field_name));
 }
 
 JsonRef Json::operator[](string const &field_name) {
-    return JsonAccessors::AccessField(value_, field_name);
+    return JsonRef(AccessField(field_name));
 }
 
-JsonRef const Json::operator[](size_type index) const {
-    return JsonAccessors::AccessElem(value_, index);
+ConstJsonRef Json::operator[](ArraySizeType index) const {
+    return ConstJsonRef(AccessElem(index));
 }
 
-JsonRef Json::operator[](size_type index) {
-    return JsonAccessors::AccessElem(value_, index);
+JsonRef Json::operator[](ArraySizeType index) {
+    return JsonRef(AccessElem(index));
 }
 
 Json &Json::operator+=(Json const& val) {

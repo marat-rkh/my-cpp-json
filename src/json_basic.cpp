@@ -48,3 +48,23 @@ nullptr_t JsonBasic::AsNull() const {
     }
     return nullptr;
 }
+
+inline string InvalidOperation(string const &prefix, JType const &t) {
+    return prefix + JTypeUtils::ToString(t);
+}
+
+JsonBasic::JsonValuePtr const &JsonBasic::AccessField(string const &field_name) const {
+    auto &value = Value();
+    if(value->type() == JType::JOBJECT) {
+        return as<JsonObject>(value)->value()[field_name];
+    }
+    throw runtime_error(InvalidOperation("attempt to access field on ", value->type()));
+}
+
+JsonBasic::JsonValuePtr const &JsonBasic::AccessElem(ArraySizeType index) const {
+    auto &value = Value();
+    if(value->type() == JType::JARRAY) {
+        return as<JsonArray>(value)->value()[index];
+    }
+    throw runtime_error(InvalidOperation("attempt to index ", value->type()));
+}

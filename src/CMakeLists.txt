@@ -5,8 +5,9 @@ set(SRC
     lexer.cpp
     json_serializer.cpp
     json_ref.cpp
-    json_accessors.cpp
     json_basic.cpp
+    json_mutable.cpp
+    const_json_ref.cpp
 )
 add_library(json-cpp ${SRC})
 target_include_directories (json-cpp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

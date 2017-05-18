@@ -6,18 +6,16 @@
 
 #include "json_model.h"
 #include "json_accessors.h"
-#include "json_basic.h"
+#include "json_mutable.h"
 
 namespace json_cpp {
 
 class Json;
+class ConstJsonRef;
 
-class JsonRef: public JsonBasic {
+class JsonRef: public JsonMutable {
     friend class Json;
 public:
-    using size_type = JsonAccessors::size_type;
-
-    JsonRef(std::shared_ptr<inner::json_model::JsonValue>& value_ref);
     JsonRef &operator=(Json const &json);
     JsonRef &operator=(Json &&json);
 
@@ -28,16 +26,18 @@ public:
     JsonRef(JsonRef &&r);
     JsonRef &operator=(JsonRef &&r);
 
-    JsonRef const operator[](std::string const &field_name) const;
+    ConstJsonRef operator[](std::string const &field_name) const;
     JsonRef operator[](std::string const &field_name);
 
-    JsonRef const operator[](size_type index) const;
-    JsonRef operator[](size_type index);
+    ConstJsonRef operator[](ArraySizeType index) const;
+    JsonRef operator[](ArraySizeType index);
 protected:
-    std::shared_ptr<inner::json_model::JsonValue> &Value() override { return value_ref_; }
-    std::shared_ptr<inner::json_model::JsonValue> const &Value() const override { return value_ref_; }
+    JsonValuePtr const &Value() const override { return value_ref_; }
+    JsonValuePtr &Value() override { return value_ref_; }
 private:
-    std::shared_ptr<inner::json_model::JsonValue> &value_ref_;
+    JsonRef(JsonValuePtr& value_ref);
+
+    JsonValuePtr &value_ref_;
 };
 
 }

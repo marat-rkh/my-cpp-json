@@ -9,6 +9,8 @@ namespace json_cpp {
 // TODO prohibit pointers creation
 class JsonBasic {
 public:
+    using ArraySizeType = inner::json_model::JsonArray::size_type;
+
     std::string const &AsString() const;
     double AsDouble() const;
     bool AsBool() const;
@@ -19,8 +21,12 @@ public:
         return val ? val->type() : JType::JNULL; 
     }
 protected:
-    virtual std::shared_ptr<inner::json_model::JsonValue> &Value() = 0;
-    virtual std::shared_ptr<inner::json_model::JsonValue> const &Value() const = 0;
+    using JsonValuePtr = std::shared_ptr<inner::json_model::JsonValue>;
+
+    virtual JsonValuePtr const &Value() const = 0;
+
+    JsonValuePtr const &AccessField(std::string const &field_name) const;
+    JsonValuePtr const &AccessElem(ArraySizeType index) const;
 };
 
 }

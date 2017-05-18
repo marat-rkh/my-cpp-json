@@ -1,6 +1,7 @@
 #include "json_ref.h"
 
 #include "json.h"
+#include "const_json_ref.h"
 #include "utils.h"
 
 #include <stdexcept>
@@ -13,9 +14,7 @@ using std::nullptr_t;
 using namespace json_cpp;
 using namespace json_cpp::inner::json_model;
 
-JsonRef::JsonRef(shared_ptr<JsonValue>& value_ref)
-    : value_ref_(value_ref)
-{}
+// public
 
 JsonRef &JsonRef::operator=(Json const &json) {
     if(value_ref_ != json.value_) {
@@ -42,18 +41,24 @@ JsonRef &JsonRef::operator=(JsonRef &&r) {
     return *this;
 }
 
-JsonRef const JsonRef::operator[](string const &field_name) const {
-    return JsonAccessors::AccessField(value_ref_, field_name);
+ConstJsonRef JsonRef::operator[](string const &field_name) const {
+    return ConstJsonRef(AccessField(field_name));
 }
 
 JsonRef JsonRef::operator[](string const &field_name) {
-    return JsonAccessors::AccessField(value_ref_, field_name);
+    return JsonRef(AccessField(field_name));
 }
 
-JsonRef const JsonRef::operator[](size_type index) const {
-    return JsonAccessors::AccessElem(value_ref_, index);
+ConstJsonRef JsonRef::operator[](ArraySizeType index) const {
+    return ConstJsonRef(AccessElem(index));
 }
 
-JsonRef JsonRef::operator[](size_type index) {
-    return JsonAccessors::AccessElem(value_ref_, index);
+JsonRef JsonRef::operator[](ArraySizeType index) {
+    return JsonRef(AccessElem(index));
 }
+
+// private
+
+JsonRef::JsonRef(shared_ptr<JsonValue>& value_ref)
+    : value_ref_(value_ref)
+{}
