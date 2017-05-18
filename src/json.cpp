@@ -65,10 +65,6 @@ Json &Json::operator=(Json &&other) noexcept {
     return *this;
 }
 
-inline string InvalidOperation(string const &prefix, JType const &t) {
-    return prefix + JTypeUtils::ToString(t);
-}
-
 Json &Json::operator+=(Json const& elem) {
     AddElemToArray(elem);
     return *this;
@@ -80,62 +76,6 @@ Json &Json::operator+=(JsonRef const& elem) {
 Json &Json::operator+=(ConstJsonRef const& elem) {
     AddElemToArray(elem);
     return *this;
-}
-
-Json::object_iterator Json::ObjectBegin() {
-    if(value_->type() == JType::JOBJECT) {
-        return MakeMappingBegin(as<JsonObject>(value_)->value().begin(), &Json::ProxyEntry);
-    }
-    throw runtime_error(InvalidOperation("attempt to access object iterator on ", value_->type()));
-}
-
-Json::object_const_iterator Json::ObjectBegin() const {
-    if(value_->type() == JType::JOBJECT) {
-        return MakeMappingBegin(as<JsonObject>(value_)->value().begin(), &Json::ProxyEntryConst);
-    }
-    throw runtime_error(InvalidOperation("attempt to access object iterator on ", value_->type()));
-}
-
-Json::object_iterator Json::ObjectEnd() {
-    if(value_->type() == JType::JOBJECT) {
-        return MakeMappingBegin(as<JsonObject>(value_)->value().end(), &Json::ProxyEntry);
-    }
-    throw runtime_error(InvalidOperation("attempt to access object iterator on ", value_->type()));
-}
-
-Json::object_const_iterator Json::ObjectEnd() const {
-    if(value_->type() == JType::JOBJECT) {
-        return MakeMappingBegin(as<JsonObject>(value_)->value().end(), &Json::ProxyEntryConst);
-    }
-    throw runtime_error(InvalidOperation("attempt to access object iterator on ", value_->type()));
-}
-
-Json::array_iterator Json::ArrayBegin() {
-    if(value_->type() == JType::JARRAY) {
-        return MakeMappingBegin(as<JsonArray>(value_)->value().begin(), &Json::Proxy);
-    }
-    throw runtime_error(InvalidOperation("attempt to access array iterator on ", value_->type()));
-}
-
-Json::array_const_iterator Json::ArrayBegin() const {
-    if(value_->type() == JType::JARRAY) {
-        return MakeMappingBegin(as<JsonArray>(value_)->value().begin(), &Json::ProxyConst);
-    }
-    throw runtime_error(InvalidOperation("attempt to access array iterator on ", value_->type()));
-}
-
-Json::array_iterator Json::ArrayEnd() {
-    if(value_->type() == JType::JARRAY) {
-        return MakeMappingBegin(as<JsonArray>(value_)->value().end(), &Json::Proxy);
-    }
-    throw runtime_error(InvalidOperation("attempt to access array iterator on ", value_->type()));
-}
-
-Json::array_const_iterator Json::ArrayEnd() const {
-    if(value_->type() == JType::JARRAY) {
-        return MakeMappingBegin(as<JsonArray>(value_)->value().end(), &Json::ProxyConst);
-    }
-    throw runtime_error(InvalidOperation("attempt to access array iterator on ", value_->type()));
 }
 
 // static members

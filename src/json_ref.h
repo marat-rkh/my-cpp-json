@@ -14,6 +14,7 @@ class ConstJsonRef;
 
 class JsonRef: public JsonMutable {
     friend class JsonMutable;
+    friend class JsonBasic;
     friend class Json;
 public:
     JsonRef &operator=(Json const &json);

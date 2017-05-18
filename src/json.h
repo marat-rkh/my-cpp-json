@@ -20,31 +20,8 @@ class ConstJsonRef;
 
 class Json: public JsonMutable {
     friend class JsonRef;
-private:
-    template<typename V>
-    using ObjectEntry = std::pair<std::string const, V>;
+    friend class ConstJsonRef;
 public:
-    using object_iterator = 
-        inner::utils::MappingIterator<
-            inner::json_model::JsonObject::iterator,
-            ObjectEntry<JsonRef>
-        >;
-    using object_const_iterator = 
-        inner::utils::MappingIterator<
-            inner::json_model::JsonObject::iterator,
-            ObjectEntry<JsonRef const>
-        >;
-    using array_iterator = 
-        inner::utils::MappingIterator<
-            typename inner::json_model::JsonArray::iterator,
-            JsonRef
-        >;
-    using array_const_iterator =  
-        inner::utils::MappingIterator<
-            typename inner::json_model::JsonArray::iterator,
-            JsonRef const
-        >;
-
     Json() = default;
     Json(std::nullptr_t np): Json() {}
     Json(std::string const& str);
@@ -66,16 +43,6 @@ public:
     Json &operator+=(JsonRef const& elem);
     Json &operator+=(ConstJsonRef const& elem);
 
-    object_iterator ObjectBegin();
-    object_const_iterator ObjectBegin() const;
-    object_iterator ObjectEnd();
-    object_const_iterator ObjectEnd() const;
-
-    array_iterator ArrayBegin();
-    array_const_iterator ArrayBegin() const;
-    array_iterator ArrayEnd();
-    array_const_iterator ArrayEnd() const;
-
     // these functions are meant to be used as literals 
     // so they have short lower case names
     static Json obj(std::initializer_list<std::pair<const std::string, Json>> const &lst = {});
@@ -85,16 +52,6 @@ protected:
     JsonValuePtr &Value() override { return value_; }
 private:
     JsonValuePtr value_;
-
-    static ObjectEntry<JsonRef> ProxyEntry(ObjectEntry<JsonValuePtr> &p) {
-        return std::make_pair(p.first, JsonRef(p.second));
-    }
-    static ObjectEntry<JsonRef const> ProxyEntryConst(ObjectEntry<JsonValuePtr> &p) {
-        return std::make_pair(p.first, JsonRef(p.second));
-    }
-
-    static JsonRef Proxy(JsonValuePtr &ptr) { return JsonRef(ptr); }
-    static JsonRef const ProxyConst(JsonValuePtr &ptr) { return JsonRef(ptr); }
 };
 
 }

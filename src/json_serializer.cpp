@@ -35,7 +35,7 @@ std::string JsonSerializer::CompactPrint(Json const &json) {
 }
 
 void JsonSerializer::Print(
-    Json const &json,
+    ConstJsonRef const &json,
     std::ostream &os,
     unsigned int cur_indent
 ) {

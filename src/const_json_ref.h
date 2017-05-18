@@ -15,6 +15,9 @@ class ConstJsonRef: public JsonBasic {
 public:
     ConstJsonRef(ConstJsonRef const &r) = default;
     ConstJsonRef(ConstJsonRef &&r);
+
+    // implicit conversions
+    ConstJsonRef(Json const &json);
 protected:
     JsonValuePtr const &Value() const override { return value_ref_; }
 private:

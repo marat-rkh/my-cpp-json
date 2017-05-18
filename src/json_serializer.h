@@ -3,7 +3,9 @@
 
 #include <iostream>
 
+// TODO all proxy classes should be included with one header file
 #include "json.h"
+#include "const_json_ref.h"
 
 namespace json_cpp {
 
@@ -16,7 +18,7 @@ public:
     std::string CompactPrint(Json const &json);
 private:
     void Print(
-        Json const &json,
+        ConstJsonRef const &json,
         std::ostream &os,
         unsigned int cur_indent
     );
