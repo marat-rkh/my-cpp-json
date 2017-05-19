@@ -4,7 +4,6 @@
 #include "json_basic.h"
 #include "mapping_iterator.h"
 
-
 namespace json_cpp { 
 
 class JsonRef;

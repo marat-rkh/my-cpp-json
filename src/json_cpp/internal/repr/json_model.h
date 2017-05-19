@@ -83,6 +83,34 @@ private:
 
 std::shared_ptr<JsonValue> CopyJsonTree(std::shared_ptr<JsonValue> const &original);
 
+template<typename T>
+struct GetJType {};
+
+template<>
+struct GetJType<JsonString> {
+    static JType const value = JType::JSTRING;
+};
+
+template<>
+struct GetJType<JsonNumber> {
+    static JType const value = JType::JNUMBER;
+};
+
+template<>
+struct GetJType<JsonObject> {
+    static JType const value = JType::JOBJECT;
+};
+
+template<>
+struct GetJType<JsonArray> {
+    static JType const value = JType::JARRAY;
+};
+
+template<>
+struct GetJType<JsonBool> {
+    static JType const value = JType::JBOOL;
+};
+
 }}}
 
 #endif

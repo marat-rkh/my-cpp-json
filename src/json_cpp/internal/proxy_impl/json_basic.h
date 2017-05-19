@@ -3,10 +3,13 @@
 
 #include <memory>
 #include <utility>
+#include <type_traits>
+#include <stdexcept>
 
 #include "json_type.h"
 #include "json_model.h"
 #include "mapping_iterator.h"
+#include "utils.h"
 
 namespace json_cpp { 
 
@@ -66,6 +69,22 @@ protected:
     static std::pair<std::string const, P> ProxyPair(std::pair<std::string const, JsonValuePtr> &p) {
         return std::make_pair(p.first, P(p.second));
     }
+
+    // Casts result of Value() (of type shared_ptr<JsonValue>) to shared_ptr<T>
+    // and applies function of type F to the cast result. If dynamic type of JsonValue 
+    // is not T, throws exception.
+    template<typename T, typename F>
+    auto ApplyToValueAs(std::string const &action_name, F func) const ->
+        typename std::result_of<F(std::shared_ptr<T> &)>::type
+    {
+        auto &val = Value();
+        if(!val || val->type() != repr::GetJType<T>::value) {
+            throw std::runtime_error(InvalidAction(val->type(), action_name));
+        }
+        return func(as<T>(val));
+    }
+
+    static std::string InvalidAction(JType const &t, std::string const &descr);
 };
 
 }}}
