@@ -13,8 +13,6 @@
 using std::istream;
 using std::ifstream;
 using std::string;
-using std::shared_ptr;
-using std::make_shared;
 using std::map;
 using std::pair;
 using std::vector;
@@ -24,20 +22,17 @@ using json_cpp::internal::lexer::Lexer;
 
 namespace json_cpp {
 
-JsonParser::ParseResultPtr JsonParser::Parse(string const &file_path) {
+Json JsonParser::Parse(string const &file_path) {
     ifstream ifs(file_path);
     lexer_.init(&ifs);
     auto res = ParseJValue();
     if(error_occured_) {
-        return make_shared<ParseError>(error_line_, error_pos_, error_msg_);
+        throw JsonParseException(error_msg_, error_line_, error_pos_);
     } else if (lexer_.GetToken().type() != Token::Type::END) {
         // parsing succeeded but input still has some characters
-        return make_shared<ParseError>(
-            0, 0, "json file must contain one top level json value"
-        );
-    } else {
-        return make_shared<ParsedJson>(res);
+        throw JsonParseException("json file must contain one top level json value");
     }
+    return std::move(res);
 }
 
 void JsonParser::Error(std::string const &msg, unsigned int line, unsigned int pos) {
@@ -76,14 +71,14 @@ Json JsonParser::ParseJValue() {
         if(error_occured_) {
             return Json();
         }
-        return arr;
+        return std::move(arr);
     }
     if(lexer_.PeekToken().type() == Token::Type::C_BR_OPEN) {
         auto j_obj = ParseJObject();
         if(error_occured_) {
             return Json();
         }
-        return j_obj;
+        return std::move(j_obj);
     }
     Error("invalid json value declaration");
     return Json();
@@ -115,7 +110,7 @@ Json JsonParser::ParseJObject() {
         Error("expected '}' at the end of json object");
         return Json();
     }
-    return obj;
+    return std::move(obj);
 }
 
 pair<string, Json> JsonParser::ParseKeyValue() {
@@ -132,7 +127,7 @@ pair<string, Json> JsonParser::ParseKeyValue() {
     if(error_occured_) {
         return {"", Json()};
     }
-    return {TrimQuotes(key.value()), val};
+    return {TrimQuotes(key.value()), std::move(val)};
 }
 
 Json JsonParser::ParseJArray() {
@@ -161,7 +156,7 @@ Json JsonParser::ParseJArray() {
         Error("expected ']' at the end of json array");
         return Json();
     }
-    return arr;
+    return std::move(arr);
 }
 
 }

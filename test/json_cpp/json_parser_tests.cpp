@@ -1,24 +1,23 @@
 #include "gtest/gtest.h"
  
-#include "json_parser.h"
+#include "json_cpp.h"
 
 #include <iostream>
 
-using namespace json_cpp;
 using std::cout;
 using std::endl;
 
+using namespace json_cpp;
+
 TEST(json_parser, should_prcess_empty_object) {
     JsonParser parser;
-    auto res = parser.Parse("data/empty_object.json");
-    ASSERT_EQ(res->type(), ParseResult::Type::JSON);
+    Json json = parser.Parse("data/empty_object.json");
+    ASSERT_EQ(json.Type(), JType::JOBJECT);
 }
 
 TEST(json_parser, should_handle_top_level_array) {
     JsonParser parser;
-    auto res = parser.Parse("data/top_level_array.json");
-    ASSERT_EQ(res->type(), ParseResult::Type::JSON);
-    Json arr = as<ParsedJson>(res)->value();
+    Json arr = parser.Parse("data/top_level_array.json");
     ASSERT_EQ(arr[0].AsDouble(), 1.0);
     ASSERT_EQ(arr[1].AsDouble(), 2.0);
     ASSERT_EQ(arr[2].AsDouble(), 3.0);
@@ -26,9 +25,7 @@ TEST(json_parser, should_handle_top_level_array) {
 
 TEST(json_parser, should_handle_all_field_types) {
     JsonParser parser;
-    auto res = parser.Parse("data/all_field_types.json");
-    ASSERT_EQ(res->type(), ParseResult::Type::JSON);
-    Json obj = as<ParsedJson>(res)->value();
+    Json obj = parser.Parse("data/all_field_types.json");
 
     ASSERT_EQ(obj["str_field"].AsString(), "str_value");
     ASSERT_EQ(obj["arr_field"][0].AsDouble(), 1.0);
@@ -40,9 +37,7 @@ TEST(json_parser, should_handle_all_field_types) {
 
 TEST(json_parser, should_parse_real_world1_json) {
     JsonParser parser;
-    auto res = parser.Parse("data/real_world1.json");
-    ASSERT_EQ(res->type(), ParseResult::Type::JSON);
-    Json obj = as<ParsedJson>(res)->value();
+    Json obj = parser.Parse("data/real_world1.json");
 
     ASSERT_EQ(obj["glossary"]["title"].AsString(), "example glossary");
     ASSERT_EQ(obj["glossary"]["GlossDiv"]["title"].AsString(), "S");
@@ -62,9 +57,7 @@ TEST(json_parser, should_parse_real_world1_json) {
 
 TEST(json_parser, should_parse_real_world2_json) {
     JsonParser parser;
-    auto res = parser.Parse("data/real_world2.json");
-    ASSERT_EQ(res->type(), ParseResult::Type::JSON);
-    Json obj = as<ParsedJson>(res)->value();
+    Json obj = parser.Parse("data/real_world2.json");
 
     ASSERT_EQ(obj["widget"]["debug"].AsString(), "on");
     ASSERT_EQ(obj["widget"]["window"]["title"].AsString(), "Sample Konfabulator Widget");

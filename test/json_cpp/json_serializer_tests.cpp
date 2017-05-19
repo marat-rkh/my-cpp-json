@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "json_serializer.h"
-#include "json_parser.h"
+#include "json_cpp.h"
 
 #include <fstream>
 #include <sstream>
@@ -28,7 +27,7 @@ void ShouldPrint(string const &in_file, string const &pretty_file, string const 
     buffer.str("");
 
     JsonParser parser;
-    auto json = as<ParsedJson>(parser.Parse(in_file))->value();
+    auto json = parser.Parse(in_file);
 
     JsonSerializer jser;
     ASSERT_EQ(jser.PrettyPrint(json), pretty);
