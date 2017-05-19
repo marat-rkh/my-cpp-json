@@ -5,11 +5,13 @@
 #include <functional>
 #include <map>
 
-using namespace json_cpp::inner::utils;
 using std::vector;
 using std::function;
 using std::map;
 using std::pair;
+
+using json_cpp::internal::utils::MakeMappingBegin;
+using json_cpp::internal::utils::MakeMappingEnd;
 
 TEST(mapping_iterator, should_return_by_value) {
     vector<int> vs = {1, 2, 3};

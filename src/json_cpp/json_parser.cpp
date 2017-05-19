@@ -19,8 +19,10 @@ using std::map;
 using std::pair;
 using std::vector;
 
-using namespace json_cpp;
-using namespace json_cpp::internal::lexer;
+using json_cpp::internal::lexer::Token;
+using json_cpp::internal::lexer::Lexer;
+
+namespace json_cpp {
 
 JsonParser::ParseResultPtr JsonParser::Parse(string const &file_path) {
     ifstream ifs(file_path);
@@ -160,4 +162,6 @@ Json JsonParser::ParseJArray() {
         return Json();
     }
     return arr;
+}
+
 }

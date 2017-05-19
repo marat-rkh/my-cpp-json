@@ -5,16 +5,22 @@
 #include "json_ref.h"
 #include "const_json_ref.h"
 
-using namespace json_cpp;
-using namespace json_cpp::inner::json_model;
-using namespace json_cpp::inner::utils;
-
 using std::string;
 using std::pair;
 using std::runtime_error;
 using std::initializer_list;
 using std::make_shared;
 using std::shared_ptr;
+
+using json_cpp::internal::repr::JsonValue;
+using json_cpp::internal::repr::JsonString;
+using json_cpp::internal::repr::JsonNumber;
+using json_cpp::internal::repr::JsonBool;
+using json_cpp::internal::repr::JsonObject;
+using json_cpp::internal::repr::JsonArray;
+using json_cpp::internal::repr::CopyJsonTree;
+
+namespace json_cpp {
 
 Json::Json(string const& str)
     : value_(new JsonString(str))
@@ -93,4 +99,6 @@ Json Json::arr(initializer_list<Json> const &lst) {
     Json json;
     json.value_ = std::move(arr);
     return json;
+}
+
 }

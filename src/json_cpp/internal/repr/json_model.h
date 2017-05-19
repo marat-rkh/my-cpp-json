@@ -7,25 +7,10 @@
 #include <initializer_list>
 #include <memory>
 
+#include "json_type.h"
 #include "ordered_hashmap.h"
 
-namespace json_cpp {
-
-enum class JType {
-    JSTRING,
-    JNUMBER,
-    JOBJECT,
-    JARRAY,
-    JBOOL,
-    JNULL
-};
-
-class JTypeUtils {
-public:
-    static std::string ToString(JType const &t);
-};
-
-namespace inner { namespace json_model {
+namespace json_cpp { namespace internal { namespace repr {
 
 class JsonValue {
 public:
@@ -98,8 +83,6 @@ private:
 
 std::shared_ptr<JsonValue> CopyJsonTree(std::shared_ptr<JsonValue> const &original);
 
-}} // namespace inner::json_model
-
-}
+}}}
 
 #endif

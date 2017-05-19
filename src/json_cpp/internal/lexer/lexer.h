@@ -4,9 +4,7 @@
 #include <string>
 #include <istream>
 
-namespace json_cpp {
-namespace internal {
-namespace lexer {
+namespace json_cpp { namespace internal { namespace lexer {
 
 using std::string;
 using std::istream;
@@ -61,8 +59,6 @@ private:
     Token peeked_token_ = Token(Token::Type::UNKNOWN);
 };
 
-}
-}
-}
+}}}
 
 #endif

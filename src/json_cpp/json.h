@@ -18,7 +18,7 @@ namespace json_cpp {
 
 class ConstJsonRef;
 
-class Json: public JsonMutable {
+class Json: public internal::proxy_impl::JsonMutable {
     friend class JsonRef;
     friend class ConstJsonRef;
 public:

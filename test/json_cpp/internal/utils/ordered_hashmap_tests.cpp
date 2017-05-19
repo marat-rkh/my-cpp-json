@@ -4,11 +4,12 @@
 #include <vector>
 #include <string>
 
-using namespace json_cpp::inner::utils;
 using std::vector;
 using std::string;
 using std::pair;
 using std::initializer_list;
+
+using json_cpp::internal::utils::OrderedHashMap;
 
 template class OrderedHashMap<string, int>;
 

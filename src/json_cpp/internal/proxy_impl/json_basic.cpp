@@ -7,15 +7,21 @@
 #include "utils.h"
 #include "const_json_ref.h"
 
-using namespace json_cpp;
-using namespace json_cpp::inner::json_model;
-using namespace json_cpp::inner::utils;
-
 using std::string;
 using std::nullptr_t;
 using std::runtime_error;
 using std::pair;
 using std::make_pair;
+
+using json_cpp::internal::repr::JsonString;
+using json_cpp::internal::repr::JsonNumber;
+using json_cpp::internal::repr::JsonBool;
+using json_cpp::internal::repr::JsonObject;
+using json_cpp::internal::repr::JsonArray;
+using json_cpp::internal::utils::MakeMappingBegin;
+using json_cpp::internal::utils::MakeMappingEnd;
+
+namespace json_cpp { namespace internal { namespace proxy_impl {
 
 inline string BadConversion(JType const &from, string const &to) {
     string msg = "attempt to convert ";
@@ -117,3 +123,5 @@ JsonBasic::JsonValuePtr const &JsonBasic::AccessElem(ArraySizeType index) const 
     }
     throw runtime_error(InvalidOperation("attempt to index ", value->type()));
 }
+
+}}}

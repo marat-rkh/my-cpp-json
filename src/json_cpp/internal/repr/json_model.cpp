@@ -4,9 +4,6 @@
 
 #include "utils.h"
 
-using namespace json_cpp;
-using namespace json_cpp::inner::json_model;
-
 using std::initializer_list;
 using std::pair;
 using std::string;
@@ -14,18 +11,7 @@ using std::shared_ptr;
 using std::make_shared;
 using std::make_pair;
 
-string JTypeUtils::ToString(JType const &t) {
-    switch(t) {
-        case JType::JSTRING: return "JSTRING";
-        case JType::JNUMBER: return "JNUMBER";
-        case JType::JOBJECT: return "JOBJECT";
-        case JType::JARRAY: return "JARRAY";
-        case JType::JBOOL: return "JBOOL";
-        case JType::JNULL: return "JNULL";
-        default:
-            throw std::runtime_error("unexcepted JType enum value");
-    }
-}
+namespace json_cpp { namespace internal { namespace repr {
 
 JsonObject::JsonObject(initializer_list<pair<string const, shared_ptr<JsonValue>>> const &lst)
     : value_(lst)
@@ -35,7 +21,7 @@ JsonArray::JsonArray(initializer_list<shared_ptr<JsonValue>> const &lst)
     : value_(lst)
 {}
 
-shared_ptr<JsonValue> inner::json_model::CopyJsonTree(shared_ptr<JsonValue> const &original) {
+shared_ptr<JsonValue> CopyJsonTree(shared_ptr<JsonValue> const &original) {
     if(!original) {
         return shared_ptr<JsonValue>();
     }
@@ -68,3 +54,5 @@ shared_ptr<JsonValue> inner::json_model::CopyJsonTree(shared_ptr<JsonValue> cons
             throw std::runtime_error("unexcepted JType enum value");
     }
 }
+
+}}}

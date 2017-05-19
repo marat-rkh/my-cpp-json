@@ -9,7 +9,7 @@
 
 #include "mapping_iterator.h"
 
-namespace json_cpp { namespace inner { namespace utils {
+namespace json_cpp { namespace internal { namespace utils {
 
 /*
 * Adapter for unordered_map with iterators traversing 

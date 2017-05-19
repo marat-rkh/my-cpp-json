@@ -8,8 +8,8 @@ namespace json_cpp {
 class Json;
 class JsonRef;
 
-class ConstJsonRef: public JsonBasic {
-    friend JsonBasic;
+class ConstJsonRef: public internal::proxy_impl::JsonBasic {
+    friend internal::proxy_impl::JsonBasic;
     friend Json;
     friend JsonRef;
 public:

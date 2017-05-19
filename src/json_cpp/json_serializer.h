@@ -3,9 +3,7 @@
 
 #include <iostream>
 
-// TODO all proxy classes should be included with one header file
-#include "json.h"
-#include "const_json_ref.h"
+#include "json_cpp.h"
 
 namespace json_cpp {
 

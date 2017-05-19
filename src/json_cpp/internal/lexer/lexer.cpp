@@ -6,7 +6,7 @@
 using std::istream;
 using std::string;
 
-using json_cpp::internal::lexer::Token;
+namespace json_cpp { namespace internal { namespace lexer {
 
 bool HasChars(istream &is) {
     return !is.fail() && (is.peek(), !is.eof());
@@ -123,12 +123,12 @@ Token NextToken(istream &is) {
     }
 }
 
-void json_cpp::internal::lexer::Lexer::init(istream *is) { 
+void Lexer::init(istream *is) { 
     is_ = is; 
     peeked_ = false;
 }
 
-Token json_cpp::internal::lexer::Lexer::GetToken() {
+Token Lexer::GetToken() {
     if(!is_) {
         throw std::runtime_error("Attemp to use uninitialized lexer");
     }
@@ -139,7 +139,7 @@ Token json_cpp::internal::lexer::Lexer::GetToken() {
     return NextToken(*is_);
 }
 
-Token const &json_cpp::internal::lexer::Lexer::PeekToken() {
+Token const &Lexer::PeekToken() {
     if(!is_) {
         throw std::runtime_error("Attemp to use uninitialized lexer");
     }
@@ -149,3 +149,5 @@ Token const &json_cpp::internal::lexer::Lexer::PeekToken() {
     }
     return peeked_token_;
 }
+
+}}}

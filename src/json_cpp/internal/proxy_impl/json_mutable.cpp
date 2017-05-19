@@ -6,12 +6,15 @@
 
 #include <stdexcept>
 
-using namespace json_cpp;
-using namespace json_cpp::inner::json_model;
-using namespace json_cpp::inner::utils;
-
 using std::string;
 using std::runtime_error;
+
+using json_cpp::internal::repr::JsonObject;
+using json_cpp::internal::repr::JsonArray;
+using json_cpp::internal::utils::MakeMappingBegin;
+using json_cpp::internal::utils::MakeMappingEnd;
+
+namespace json_cpp { namespace internal { namespace proxy_impl {
 
 JsonRef JsonMutable::operator[](string const &field_name) {
     auto &r = const_cast<JsonValuePtr &>(static_cast<JsonMutable const &>(*this).AccessField(field_name));
@@ -69,3 +72,5 @@ void JsonMutable::AddElemToArray(JsonBasic const &elem) {
     }
     throw runtime_error(InvalidOperation("attempt to append element to ", val->type()));
 }
+
+}}}

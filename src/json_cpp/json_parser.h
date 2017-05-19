@@ -4,7 +4,7 @@
 #include <string>
 #include <memory>
 
-#include "json.h"
+#include "json_cpp.h"
 #include "lexer.h"
 
 namespace json_cpp {

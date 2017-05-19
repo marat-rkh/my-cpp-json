@@ -4,7 +4,7 @@
 #include <functional>
 #include <type_traits>
 
-namespace json_cpp { namespace inner { namespace utils {
+namespace json_cpp { namespace internal { namespace utils {
 
 template<typename Iter, typename Val>
 class MappingIterator: public std::iterator<

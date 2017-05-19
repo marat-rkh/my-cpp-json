@@ -2,7 +2,7 @@
 
 #include "json.h"
 
-using namespace json_cpp;
+namespace json_cpp {
 
 // public
 
@@ -19,3 +19,5 @@ ConstJsonRef::ConstJsonRef(Json const &json)
 ConstJsonRef::ConstJsonRef(JsonValuePtr const& value_ref)
     : value_ref_(value_ref)
 {}
+
+}

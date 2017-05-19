@@ -4,21 +4,24 @@
 #include "json_basic.h"
 #include "mapping_iterator.h"
 
-namespace json_cpp {
+
+namespace json_cpp { 
 
 class JsonRef;
+
+namespace internal { namespace proxy_impl {
 
 // TODO prohibit pointers creation
 class JsonMutable: public JsonBasic {
 public:
     using ObjectIterator = 
-        inner::utils::MappingIterator<
-            inner::json_model::JsonObject::iterator,
+        utils::MappingIterator<
+            repr::JsonObject::iterator,
             std::pair<std::string const, JsonRef>
         >;
     using ArrayIterator =  
-        inner::utils::MappingIterator<
-            inner::json_model::JsonArray::iterator,
+        utils::MappingIterator<
+            repr::JsonArray::iterator,
             JsonRef
         >;
 
@@ -44,6 +47,6 @@ protected:
     void AddElemToArray(JsonBasic const &elem);
 };
 
-}
+}}}
 
 #endif

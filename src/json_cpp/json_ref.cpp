@@ -1,18 +1,20 @@
 #include "json_ref.h"
 
+#include <stdexcept>
+
 #include "json.h"
 #include "const_json_ref.h"
 #include "utils.h"
-
-#include <stdexcept>
 
 using std::shared_ptr;
 using std::string;
 using std::runtime_error;
 using std::nullptr_t;
 
-using namespace json_cpp;
-using namespace json_cpp::inner::json_model;
+using json_cpp::internal::repr::JsonValue;
+using json_cpp::internal::repr::CopyJsonTree;
+
+namespace json_cpp {
 
 // public
 
@@ -59,3 +61,5 @@ JsonRef &JsonRef::operator+=(ConstJsonRef const& elem) {
 JsonRef::JsonRef(shared_ptr<JsonValue>& value_ref)
     : value_ref_(value_ref)
 {}
+
+}

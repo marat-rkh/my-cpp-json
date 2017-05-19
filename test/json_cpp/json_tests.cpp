@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
  
-#include "json.h"
+#include "json_cpp.h"
 
 using json_cpp::Json;
 using json_cpp::JType;

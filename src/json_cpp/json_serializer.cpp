@@ -3,12 +3,12 @@
 #include <string>
 #include <sstream>
 
-using namespace json_cpp;
-
 using std::ostream;
 using std::endl;
 using std::string;
 using std::stringstream;
+
+namespace json_cpp {
 
 void JsonSerializer::PrettyPrint(Json const &json, std::ostream &os, unsigned int indent_size) {
     indent_size_ = indent_size;
@@ -111,4 +111,6 @@ inline void JsonSerializer::MaybeSpaces(std::ostream &os, unsigned int spaces_nu
     if(!compact_mode_) {
         os << string(spaces_number, ' ');
     }
+}
+
 }
