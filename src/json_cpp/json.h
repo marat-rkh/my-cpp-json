@@ -9,7 +9,6 @@
 #include <initializer_list>
 
 #include "json_model.h"
-#include "utils.h"
 #include "mapping_iterator.h"
 #include "json_ref.h"
 #include "json_mutable.h"

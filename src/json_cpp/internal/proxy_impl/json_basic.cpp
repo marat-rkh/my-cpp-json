@@ -2,7 +2,6 @@
 
 #include <string>
 
-#include "utils.h"
 #include "const_json_ref.h"
 
 using std::string;

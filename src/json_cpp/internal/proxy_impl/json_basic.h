@@ -9,7 +9,6 @@
 #include "json_type.h"
 #include "json_model.h"
 #include "mapping_iterator.h"
-#include "utils.h"
 
 namespace json_cpp { 
 
@@ -81,7 +80,7 @@ protected:
         if(!val || val->type() != repr::GetJType<T>::value) {
             throw std::runtime_error(InvalidAction(val->type(), action_name));
         }
-        return func(as<T>(val));
+        return func(std::dynamic_pointer_cast<T>(val));
     }
 
     static std::string InvalidAction(JType const &t, std::string const &descr);

@@ -2,7 +2,6 @@
 
 #include <stdexcept>
 
-#include "utils.h"
 #include "json_ref.h"
 #include "json_model.h"
 
