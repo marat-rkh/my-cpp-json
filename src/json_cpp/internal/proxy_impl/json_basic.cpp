@@ -74,6 +74,9 @@ JsonBasic::ObjectConstIterator JsonBasic::ObjectEnd() const {
     );
 }
 
+JsonBasic::ObjectConstIterator JsonBasic::ObjectCBegin() const { return ObjectCBegin(); }
+JsonBasic::ObjectConstIterator JsonBasic::ObjectCEnd() const { return ObjectEnd(); }
+
 JsonBasic::ArrayConstIterator JsonBasic::ArrayBegin() const {
     return ApplyToValueAs<JsonArray>(
         "get array iterator",
@@ -91,6 +94,9 @@ JsonBasic::ArrayConstIterator JsonBasic::ArrayEnd() const {
         }
     );
 }
+
+JsonBasic::ArrayConstIterator JsonBasic::ArrayCBegin() const { return ArrayBegin(); }
+JsonBasic::ArrayConstIterator JsonBasic::ArrayCEnd() const { return ArrayEnd(); }
 
 // protected
 

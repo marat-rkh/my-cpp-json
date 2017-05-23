@@ -264,6 +264,30 @@ TEST(json, proxies_should_be_correctly_convertable) {
     ASSERT_EQ(json3.AsDouble(), -20);
 }
 
+TEST(json, should_be_iterable) {
+    Json obj {
+        {"a", 1},
+        {"b", 2},
+        {"c", 3},
+    };
+    for(auto it = obj.ObjectBegin(); it != obj.ObjectEnd(); ++it) {
+        JsonRef val = (*it).second;
+        (*it).second = val.AsDouble() * 10;
+    }
+    ASSERT_EQ(obj["a"].AsDouble(), 10);
+    ASSERT_EQ(obj["b"].AsDouble(), 20);
+    ASSERT_EQ(obj["c"].AsDouble(), 30);
+
+    Json arr = Json::arr({1, 2, 3});
+    for(auto it = arr.ArrayBegin(); it != arr.ArrayEnd(); ++it) {
+        JsonRef val = *it;
+        *it = val.AsDouble() * 10;
+    }
+    ASSERT_EQ(arr[0].AsDouble(), 10);
+    ASSERT_EQ(arr[1].AsDouble(), 20);
+    ASSERT_EQ(arr[2].AsDouble(), 30);
+}
+
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

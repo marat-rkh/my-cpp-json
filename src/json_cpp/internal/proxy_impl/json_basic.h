@@ -51,8 +51,14 @@ public:
     ObjectConstIterator ObjectBegin() const;
     ObjectConstIterator ObjectEnd() const;
 
+    ObjectConstIterator ObjectCBegin() const;
+    ObjectConstIterator ObjectCEnd() const;
+
     ArrayConstIterator ArrayBegin() const;
     ArrayConstIterator ArrayEnd() const;
+
+    ArrayConstIterator ArrayCBegin() const;
+    ArrayConstIterator ArrayCEnd() const;
 protected:
     using JsonValuePtr = std::shared_ptr<repr::JsonValue>;
 

@@ -32,6 +32,7 @@ Json JsonParser::Parse(string const &file_path) {
         // parsing succeeded but input still has some characters
         throw JsonParseException("json file must contain one top level json value");
     }
+    // TODO remove std::move in this file, as it prevents NRVO
     return std::move(res);
 }
 
