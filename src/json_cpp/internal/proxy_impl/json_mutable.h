@@ -43,7 +43,7 @@ public:
 protected:
     virtual JsonValuePtr &Value() = 0;
 
-    void AddElemToArray(JsonBasic const &elem);
+    void AddElemToArray(JsonValuePtr const &elem);
 };
 
 }}}

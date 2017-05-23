@@ -20,7 +20,6 @@ class JsonMutable;
 
 // TODO prohibit pointers creation
 class JsonBasic {
-    friend class JsonMutable;
 public:
     using ArraySizeType = repr::JsonArray::size_type;
 

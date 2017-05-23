@@ -88,15 +88,15 @@ Json &Json::operator=(ConstJsonRef const &const_json_ref) {
 }
 
 Json &Json::operator+=(Json const& elem) {
-    AddElemToArray(elem);
+    AddElemToArray(elem.value_);
     return *this;
 }
 Json &Json::operator+=(JsonRef const& elem) {
-    AddElemToArray(elem);
+    AddElemToArray(elem.value_ref_);
     return *this;
 }
 Json &Json::operator+=(ConstJsonRef const& elem) {
-    AddElemToArray(elem);
+    AddElemToArray(elem.value_ref_);
     return *this;
 }
 

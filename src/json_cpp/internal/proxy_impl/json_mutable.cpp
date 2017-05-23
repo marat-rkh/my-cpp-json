@@ -64,10 +64,10 @@ JsonMutable::ArrayIterator JsonMutable::ArrayEnd() {
 
 // protected
 
-void JsonMutable::AddElemToArray(JsonBasic const &elem) {
+void JsonMutable::AddElemToArray(JsonValuePtr const &elem) {
     return ApplyToValueAs<JsonArray>(
         "append element to json array",
-        [&](shared_ptr<JsonArray> const &a) { a->value().push_back(CopyJsonTree(elem.Value())); }
+        [&](shared_ptr<JsonArray> const &a) { a->value().push_back(CopyJsonTree(elem)); }
     );
 }
 

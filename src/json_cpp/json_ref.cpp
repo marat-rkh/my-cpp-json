@@ -47,15 +47,15 @@ JsonRef &JsonRef::operator=(ConstJsonRef const &const_json_ref) {
 }
 
 JsonRef &JsonRef::operator+=(Json const& elem) {
-    AddElemToArray(elem);
+    AddElemToArray(elem.value_);
     return *this;
 }
 JsonRef &JsonRef::operator+=(JsonRef const& elem) {
-    AddElemToArray(elem);
+    AddElemToArray(elem.value_ref_);
     return *this;
 }
 JsonRef &JsonRef::operator+=(ConstJsonRef const& elem) {
-    AddElemToArray(elem);
+    AddElemToArray(elem.value_ref_);
     return *this;
 }
 
