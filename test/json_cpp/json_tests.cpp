@@ -2,8 +2,7 @@
  
 #include "json_cpp.h"
 
-using json_cpp::Json;
-using json_cpp::JType;
+using namespace json_cpp;
 
 TEST(json, should_handle_string) {
     Json json("some str");
@@ -223,6 +222,46 @@ TEST(json, should_be_moved) {
     ASSERT_EQ(moved1.Type(), JType::JNULL);
     ASSERT_EQ(moved2["a"].AsDouble(), 3);
     ASSERT_EQ(moved2["b"]["c"].AsDouble(), 4);
+}
+
+TEST(json, proxies_should_be_correctly_convertable) {
+    Json json = 1;
+    JsonRef ref = json;
+    ConstJsonRef cref = json;
+    json = 10;
+    ASSERT_EQ(json.AsDouble(), 10);
+    ASSERT_EQ(ref.AsDouble(), 10);
+    ASSERT_EQ(cref.AsDouble(), 10);
+    ref = 20;
+    ASSERT_EQ(json.AsDouble(), 20);
+    ASSERT_EQ(ref.AsDouble(), 20);
+    ASSERT_EQ(cref.AsDouble(), 20);
+
+    JsonRef ref2 = ref;
+    ConstJsonRef cref2 = cref;
+    json = 30;
+    ASSERT_EQ(json.AsDouble(), 30);
+    ASSERT_EQ(ref.AsDouble(), 30);
+    ASSERT_EQ(cref.AsDouble(), 30);
+    ASSERT_EQ(ref2.AsDouble(), 30);
+    ASSERT_EQ(cref2.AsDouble(), 30);
+
+    ConstJsonRef cref3 = ref2;
+    json = 40;
+    ASSERT_EQ(cref3.AsDouble(), 40);
+
+    // JsonRef bad = Json(3); // not possible
+    // ConstJsonRef bad = Json(3); // not possible
+
+    Json json2 = ref;
+    Json json3 = cref;
+    json2 = -10;
+    json3 = -20;
+    ASSERT_EQ(json.AsDouble(), 40);
+    ASSERT_EQ(ref.AsDouble(), 40);
+    ASSERT_EQ(cref.AsDouble(), 40);
+    ASSERT_EQ(json2.AsDouble(), -10);
+    ASSERT_EQ(json3.AsDouble(), -20);
 }
 
 int main(int argc, char **argv) {

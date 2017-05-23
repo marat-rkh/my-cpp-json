@@ -29,14 +29,19 @@ public:
     Json(int num): Json(static_cast<double>(num)) {}
     Json(bool b);
     Json(std::initializer_list<std::pair<const std::string, Json>> const &lst);
-    Json(JsonRef const &json_ref);
 
-    Json(Json const&other);
+    Json(Json const &other);
     Json(Json &&other) noexcept;
-    ~Json();
 
     Json &operator=(Json const &other);
     Json &operator=(Json &&other) noexcept;
+
+    // conversions between ConstJsonRef, JsonRef and Json
+    Json(JsonRef const &json_ref);
+    Json(ConstJsonRef const &const_json_ref);
+    
+    Json &operator=(JsonRef const &json_ref);
+    Json &operator=(ConstJsonRef const &const_json_ref);
 
     Json &operator+=(Json const& elem);
     Json &operator+=(JsonRef const& elem);

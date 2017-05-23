@@ -43,10 +43,6 @@ Json::Json(initializer_list<pair<const string, Json>> const &lst) {
     value_ = std::move(obj);
 }
 
-Json::Json(JsonRef const &json_ref)
-    : value_(CopyJsonTree(json_ref.value_ref_))
-{}
-
 Json::Json(Json const &other) 
     : value_(CopyJsonTree(other.value_))
 {}
@@ -54,8 +50,6 @@ Json::Json(Json const &other)
 Json::Json(Json &&other) noexcept
     : value_(std::move(other.value_))
 {}
-
-Json::~Json() {}
 
 Json &Json::operator=(Json const& other) {
     if(this != &other) {
@@ -67,6 +61,28 @@ Json &Json::operator=(Json const& other) {
 Json &Json::operator=(Json &&other) noexcept {
     if(this != &other) {
         value_ = std::move(other.value_);
+    }
+    return *this;
+}
+
+Json::Json(JsonRef const &json_ref)
+    : value_(CopyJsonTree(json_ref.value_ref_))
+{}
+
+Json::Json(ConstJsonRef const &const_json_ref)
+    : value_(CopyJsonTree(const_json_ref.value_ref_))
+{}
+
+Json &Json::operator=(JsonRef const &json_ref) {
+    if(value_ != json_ref.value_ref_) {
+        value_ = CopyJsonTree(json_ref.value_ref_);
+    }
+    return *this;
+}
+
+Json &Json::operator=(ConstJsonRef const &const_json_ref) {
+    if(value_ != const_json_ref.value_ref_) {
+        value_ = CopyJsonTree(const_json_ref.value_ref_);
     }
     return *this;
 }

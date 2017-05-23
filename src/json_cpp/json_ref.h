@@ -16,16 +16,21 @@ class JsonRef: public internal::proxy_impl::JsonMutable {
     friend class internal::proxy_impl::JsonMutable;
     friend class JsonBasic;
     friend class Json;
+    friend class ConstJsonRef;
 public:
-    JsonRef &operator=(Json const &json);
-    JsonRef &operator=(Json &&json);
-
     JsonRef(JsonRef const &r) = default;
     JsonRef &operator=(JsonRef const &r) = default;
     // These two make copy as JsonRef is a proxy for reference 
     // and there is no meaning of moving reference
     JsonRef(JsonRef &&r);
     JsonRef &operator=(JsonRef &&r);
+
+    // it is only possible to construct JsonRef from ref to non const json
+    JsonRef(Json &json);
+
+    // methods to manipulate json we are referring to
+    JsonRef &operator=(Json const &json);
+    JsonRef &operator=(ConstJsonRef const &const_json_ref);
 
     JsonRef &operator+=(Json const& elem);
     JsonRef &operator+=(JsonRef const& elem);

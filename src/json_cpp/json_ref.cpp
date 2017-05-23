@@ -17,20 +17,6 @@ namespace json_cpp {
 
 // public
 
-JsonRef &JsonRef::operator=(Json const &json) {
-    if(value_ref_ != json.value_) {
-        value_ref_ = CopyJsonTree(json.value_);
-    }
-    return *this;
-}
-
-JsonRef &JsonRef::operator=(Json &&json) {
-    if(value_ref_ != json.value_) {
-        value_ref_ = json.value_;
-    }
-    return *this;
-}
-
 JsonRef::JsonRef(JsonRef &&r)
     : value_ref_(r.value_ref_)
 {}
@@ -38,6 +24,24 @@ JsonRef::JsonRef(JsonRef &&r)
 JsonRef &JsonRef::operator=(JsonRef &&r) {
     if(this != &r) {
         value_ref_ = r.value_ref_;
+    }
+    return *this;
+}
+
+JsonRef::JsonRef(Json &json)
+    : value_ref_(json.value_)
+{}
+
+JsonRef &JsonRef::operator=(Json const &json) {
+    if(value_ref_ != json.value_) {
+        value_ref_ = CopyJsonTree(json.value_);
+    }
+    return *this;
+}
+
+JsonRef &JsonRef::operator=(ConstJsonRef const &const_json_ref) {
+    if(value_ref_ != const_json_ref.value_ref_) {
+        value_ref_ = CopyJsonTree(const_json_ref.value_ref_);
     }
     return *this;
 }

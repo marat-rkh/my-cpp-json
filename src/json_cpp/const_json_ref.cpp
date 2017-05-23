@@ -1,6 +1,7 @@
 #include "const_json_ref.h"
 
 #include "json.h"
+#include "json_ref.h"
 
 namespace json_cpp {
 
@@ -12,6 +13,10 @@ ConstJsonRef::ConstJsonRef(ConstJsonRef &&r)
 
 ConstJsonRef::ConstJsonRef(Json const &json)
     : value_ref_(json.value_)
+{}
+
+ConstJsonRef::ConstJsonRef(JsonRef const &json_ref)
+    : value_ref_(json_ref.value_ref_)
 {}
 
 // private
