@@ -41,11 +41,35 @@ TEST(json_serializer, should_print_empty_object) {
     ASSERT_EQ(jser.CompactPrint(json), "{}");
 }
 
-TEST(json_serializer, DISABLED_should_print_all_field_types_json) {
+TEST(json_serializer, should_print_all_field_types_json) {
     ShouldPrint(
         "data/all_field_types.json", 
         "data/all_field_types_pretty.json", 
         "data/all_field_types_compact.json"
+    );
+}
+
+TEST(json_serializer, should_print_top_level_array_json) {
+    ShouldPrint(
+        "data/top_level_array.json", 
+        "data/top_level_array_pretty.json", 
+        "data/top_level_array_compact.json"
+    );
+}
+
+TEST(json_serializer, should_print_real_world1_json) {
+    ShouldPrint(
+        "data/real_world1.json", 
+        "data/real_world1_pretty.json", 
+        "data/real_world1_compact.json"
+    );
+}
+
+TEST(json_serializer, should_print_real_world2_json) {
+    ShouldPrint(
+        "data/real_world2.json", 
+        "data/real_world2_pretty.json", 
+        "data/real_world2_compact.json"
     );
 }
 

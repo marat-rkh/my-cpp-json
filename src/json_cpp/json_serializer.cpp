@@ -68,7 +68,7 @@ void JsonSerializer::Print(
                 }
                 MaybeEndl(os);
                 MaybeSpaces(os, new_indent);
-                os << '\"' << (*it).first << ":";
+                os << '\"' << (*it).first << '\"' << ":";
                 MaybeSpaces(os, 1);
                 Print((*it).second, os, new_indent);
             }
