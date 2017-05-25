@@ -1,7 +1,6 @@
 set(SRC 
     json_cpp/internal/lexer/lexer.cpp
     json_cpp/internal/proxy_impl/json_basic.cpp
-    json_cpp/internal/proxy_impl/json_mutable.cpp
     json_cpp/internal/repr/json_model.cpp
     json_cpp/const_json_ref.cpp
     json_cpp/json.cpp

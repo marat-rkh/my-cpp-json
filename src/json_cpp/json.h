@@ -10,14 +10,15 @@
 
 #include "json_model.h"
 #include "mapping_iterator.h"
-#include "json_ref.h"
 #include "json_mutable.h"
+#include "json_ref.h"
+#include "const_json_ref.h"
 
 namespace json_cpp {
 
 class ConstJsonRef;
 
-class Json: public internal::proxy_impl::JsonMutable {
+class Json: public internal::proxy_impl::JsonMutable<JsonRef, ConstJsonRef> {
     friend class JsonRef;
     friend class ConstJsonRef;
 public:
@@ -32,6 +33,7 @@ public:
 
     Json(Json const &other);
     Json(Json &&other) noexcept;
+    ~Json() { /*TODO use recursive remove to prevent stack overflow*/ }
 
     Json &operator=(Json const &other);
     Json &operator=(Json &&other) noexcept;
@@ -54,6 +56,9 @@ public:
 protected:
     JsonValuePtr const &Value() const override { return value_; }
     JsonValuePtr &Value() override { return value_; }
+    
+    JsonRef ProxyJsonRef(JsonValuePtr &val) override { return JsonRef(val); }
+    ConstJsonRef ProxyConstJsonRef(JsonValuePtr &val) const override { return ConstJsonRef(val); }
 private:
     JsonValuePtr value_;
 };

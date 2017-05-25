@@ -1,15 +1,14 @@
 #ifndef __CONST_JSON_REF_H__
 #define __CONST_JSON_REF_H__ 
 
-#include "json_basic.h"
+#include "json_const.h"
 
 namespace json_cpp {
 
 class Json;
 class JsonRef;
 
-class ConstJsonRef: public internal::proxy_impl::JsonBasic {
-    friend internal::proxy_impl::JsonBasic;
+class ConstJsonRef: public internal::proxy_impl::JsonConst<ConstJsonRef> {
     friend Json;
     friend JsonRef;
 public:
@@ -25,6 +24,8 @@ public:
     ConstJsonRef(JsonRef const &json_ref);
 protected:
     JsonValuePtr const &Value() const override { return value_ref_; }
+
+    ConstJsonRef ProxyConstJsonRef(JsonValuePtr &val) const override { return ConstJsonRef(val); }
 private:
     ConstJsonRef(JsonValuePtr const& value_ref);
 

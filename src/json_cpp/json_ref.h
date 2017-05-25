@@ -12,9 +12,7 @@ namespace json_cpp {
 class Json;
 class ConstJsonRef;
 
-class JsonRef: public internal::proxy_impl::JsonMutable {
-    friend class internal::proxy_impl::JsonMutable;
-    friend class JsonBasic;
+class JsonRef: public internal::proxy_impl::JsonMutable<JsonRef, ConstJsonRef> {
     friend class Json;
     friend class ConstJsonRef;
 public:
@@ -38,6 +36,9 @@ public:
 protected:
     JsonValuePtr const &Value() const override { return value_ref_; }
     JsonValuePtr &Value() override { return value_ref_; }
+
+    JsonRef ProxyJsonRef(JsonValuePtr &val) override { return JsonRef(val); }
+    ConstJsonRef ProxyConstJsonRef(JsonValuePtr &val) const override;
 private:
     JsonRef(JsonValuePtr& value_ref);
 

@@ -59,6 +59,12 @@ JsonRef &JsonRef::operator+=(ConstJsonRef const& elem) {
     return *this;
 }
 
+// protected
+
+ConstJsonRef JsonRef::ProxyConstJsonRef(JsonValuePtr &val) const { 
+    return ConstJsonRef(val); 
+}
+
 // private
 
 JsonRef::JsonRef(shared_ptr<JsonValue>& value_ref)
