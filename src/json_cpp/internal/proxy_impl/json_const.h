@@ -1,7 +1,6 @@
 #ifndef __JSON_CONST_H__
 #define __JSON_CONST_H__
 
-#include <memory>
 #include <utility>
 
 #include "json_basic.h"

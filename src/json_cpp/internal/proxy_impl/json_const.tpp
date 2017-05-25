@@ -17,7 +17,7 @@ template<typename P>
 typename JsonConst<P>::ObjectConstIterator JsonConst<P>::ObjectBegin() const {
     return ApplyToValueAs<repr::JsonObject>(
         "get object iterator",
-        [this](std::shared_ptr<repr::JsonObject> const &o) {
+        [this](repr::JsonObject *o) {
             return utils::MakeMappingBegin(
                 o->value().begin(),
                 std::bind(&JsonConst<P>::ProxyPair, this, std::placeholders::_1)
@@ -30,7 +30,7 @@ template<typename P>
 typename JsonConst<P>::ObjectConstIterator JsonConst<P>::ObjectEnd() const {
     return ApplyToValueAs<repr::JsonObject>(
         "get object iterator",
-        [this](std::shared_ptr<repr::JsonObject> const &o) {
+        [this](repr::JsonObject *o) {
             return utils::MakeMappingEnd(
                 o->value().end(),
                 std::bind(&JsonConst<P>::ProxyPair, this, std::placeholders::_1)
@@ -48,7 +48,7 @@ template<typename P>
 typename JsonConst<P>::ArrayConstIterator JsonConst<P>::ArrayBegin() const {
     return ApplyToValueAs<repr::JsonArray>(
         "get array iterator",
-        [this](std::shared_ptr<repr::JsonArray> const &a) {
+        [this](repr::JsonArray *a) {
             return utils::MakeMappingBegin(
                 a->value().begin(),
                 std::bind(&JsonConst<P>::ProxyConstJsonRef, this, std::placeholders::_1)
@@ -61,7 +61,7 @@ template<typename P>
 typename JsonConst<P>::ArrayConstIterator JsonConst<P>::ArrayEnd() const {
     return ApplyToValueAs<repr::JsonArray>(
         "get array iterator",
-        [this](std::shared_ptr<repr::JsonArray> const &a) {
+        [this](repr::JsonArray *a) {
             return utils::MakeMappingEnd(
                 a->value().end(),
                 std::bind(&JsonConst<P>::ProxyConstJsonRef, this, std::placeholders::_1)
@@ -81,7 +81,7 @@ template<typename P>
 typename JsonConst<P>::JsonValuePtr const &JsonConst<P>::AccessField(std::string const &field_name) const {
     return ApplyToValueAs<repr::JsonObject>(
         "access json object field",
-        [&](std::shared_ptr<repr::JsonObject> const &o) -> JsonValuePtr const & { 
+        [&](repr::JsonObject *o) -> JsonValuePtr const & { 
             return o->value()[field_name]; 
         }
     );
@@ -91,7 +91,7 @@ template<typename P>
 typename JsonConst<P>::JsonValuePtr const &JsonConst<P>::AccessElem(ArraySizeType index) const {
     return ApplyToValueAs<repr::JsonArray>(
         "access json array element",
-        [&](std::shared_ptr<repr::JsonArray> const &a) -> JsonValuePtr const & { return a->value()[index]; }
+        [&](repr::JsonArray *a) -> JsonValuePtr const & { return a->value()[index]; }
     );
 }
 

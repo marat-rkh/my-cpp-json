@@ -7,7 +7,6 @@
 using std::string;
 using std::nullptr_t;
 using std::runtime_error;
-using std::shared_ptr;
 
 using json_cpp::internal::repr::JsonString;
 using json_cpp::internal::repr::JsonNumber;
@@ -18,21 +17,21 @@ namespace json_cpp { namespace internal { namespace proxy_impl {
 string const &JsonBasic::AsString() const {
     return ApplyToValueAs<JsonString>(
         "convert to string",
-        [](shared_ptr<JsonString> const &s) -> string const & { return s->value(); }
+        [](JsonString *s) -> string const & { return s->value(); }
     );
 }
 
 double JsonBasic::AsDouble() const {
     return ApplyToValueAs<JsonNumber>(
         "convert to double",
-        [](shared_ptr<JsonNumber> const &n) { return n->value(); }
+        [](JsonNumber *n) { return n->value(); }
     );
 }
 
 bool JsonBasic::AsBool() const {
     return ApplyToValueAs<JsonBool>(
         "convert to bool",
-        [](shared_ptr<JsonBool> const &b) { return b->value(); }
+        [](JsonBool *b) { return b->value(); }
     );
 }
 
