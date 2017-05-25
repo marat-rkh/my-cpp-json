@@ -32,8 +32,7 @@ Json JsonParser::Parse(string const &file_path) {
         // parsing succeeded but input still has some characters
         throw JsonParseException("json file must contain one top level json value");
     }
-    // TODO remove std::move in this file, as it prevents NRVO
-    return std::move(res);
+    return res;
 }
 
 void JsonParser::Error(std::string const &msg, unsigned int line, unsigned int pos) {
@@ -72,14 +71,14 @@ Json JsonParser::ParseJValue() {
         if(error_occured_) {
             return Json();
         }
-        return std::move(arr);
+        return arr;
     }
     if(lexer_.PeekToken().type() == Token::Type::C_BR_OPEN) {
         auto j_obj = ParseJObject();
         if(error_occured_) {
             return Json();
         }
-        return std::move(j_obj);
+        return j_obj;
     }
     Error("invalid json value declaration");
     return Json();
@@ -111,7 +110,7 @@ Json JsonParser::ParseJObject() {
         Error("expected '}' at the end of json object");
         return Json();
     }
-    return std::move(obj);
+    return obj;
 }
 
 pair<string, Json> JsonParser::ParseKeyValue() {
@@ -157,7 +156,7 @@ Json JsonParser::ParseJArray() {
         Error("expected ']' at the end of json array");
         return Json();
     }
-    return std::move(arr);
+    return arr;
 }
 
 }
