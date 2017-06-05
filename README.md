@@ -1,2 +1,2 @@
-# json-parser
-C++ json parser (written just for fun)
+# my-cpp-json
+C++ 11 json library (written just for fun)

@@ -1,2 +1,2 @@
-add_executable (json-cpp-main main.cpp)
-target_link_libraries (json-cpp-main LINK_PUBLIC json-cpp)
+add_executable (my-cpp-json-main main.cpp)
+target_link_libraries (my-cpp-json-main LINK_PUBLIC my-cpp-json)
