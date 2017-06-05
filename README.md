@@ -65,8 +65,8 @@ json["Additional info"].Type() == JType::JOBJECT; // true
 // Available types: JSTRING, JNUMBER, JOBJECT, JARRAY, JBOOL, JNULL
 
 // 4. Work with sub objects through proxy types
-// JsonRef behaves like Json&
-// ConstJsonRef behaves like Json const&
+// JsonRef behaves like Json &
+// ConstJsonRef behaves like Json const &
 ConstJsonRef cref = json["Additional info"]; // can call any const methods on cref
 JsonRef ref = json["Additional info"]; // can call any Json methods on ref
 // Json can be converted to JsonRef and ConstJsonRef
@@ -81,12 +81,17 @@ json["Hobbies"] += "skiing"; // add new element to array
 json["email"] = "m.morris@email.com" // add new field to object
 
 // 6. Iterate json object and json array
-// json object entries are iterated in the order 
-// they were added to json object
+// Json object entries are iterated in the order they were added
 for(auto it = json.ObjectBegin(); it != json.ObjectEnd(); ++it) {
-    JsonRef val = (*it).second;
+    const string &field = (*it).first;
+    ConstJsonRef val = (*it).second;
     if(val.Type() == JType::JSTRING) {
-        cout << (*it).first << ": " << val.AsString() << endl;
+        cout << field << ": " << val.AsString() << endl;
     }
+}
+// Iterating array
+ConstJsonRef hobbies = json["Hobbies"];
+for(auto it = hobbies.ArrayBegin(); it != hobbies.ArrayEnd(); ++it) {
+    cout << (*it).AsString() << endl;
 }
 ```
