@@ -23,7 +23,7 @@ ser.PrettyPrint(json, ofs);
 // you can also print without any formatting to make result compact
 string compact = ser.CompactPrint(json);
 
-// Parser and serializer both preserves json object entries order
+// Parser and serializer both preserve json object entries order
 // and json array elements order
 ```
 
